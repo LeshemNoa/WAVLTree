@@ -146,10 +146,20 @@ public class WAVLTree {
    * public class WAVLNode
    */
   public class WAVLNode{
-                public int getKey()
-                {
-                        return 42; // to be replaced by student code
-                }
+	  
+	  private int key;
+	  private String value;
+	  
+	  public WAVLNode(int key,String value) {
+		  this.key=key;
+		  this.value=value;
+		  
+	  }
+	  
+	  			public int getKey()
+	  			{
+	  				return key; // to be replaced by student code
+	  			}
                 public String getValue()
                 {
                         return null; // to be replaced by student code
