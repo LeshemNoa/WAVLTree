@@ -8,7 +8,7 @@
  */
 
 public class WAVLTree {
-
+	public void pushtest() {}
   /**
    * public boolean empty()
    *
