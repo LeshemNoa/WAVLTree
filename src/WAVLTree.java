@@ -8,6 +8,11 @@
  */
 
 public class WAVLTree {
+	
+	public static void main(String[] args) {
+		
+	}
+	
 	public void pushtest() {}
   /**
    * public boolean empty()
