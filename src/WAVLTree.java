@@ -8,12 +8,18 @@
  */
 
 public class WAVLTree {
-	
-	public static void main(String[] args) {
-		
-	}
-	
-	public void pushtest() {}
+//TODO think about whether we need to maintain tree size explicitly
+    private WAVLNode root;
+
+    //TODO overloaded constructor
+    /*public WAVLTree(int key, String value) {
+        this.root = new WAVLNode(key, value);
+    }*/
+
+    public WAVLTree(WAVLNode node) {
+        this.root = node;
+    }
+
   /**
    * public boolean empty()
    *
@@ -21,9 +27,11 @@ public class WAVLTree {
    *
    */
   public boolean empty() {
-    return false; // to be replaced by student code
+      if (root == null)
+          return true;
+      return false;
   }
-
+//TODO Doc, comments
  /**
    * public String search(int k)
    *
@@ -32,9 +40,14 @@ public class WAVLTree {
    */
   public String search(int k)
   {
-        return "42";  // to be replaced by student code
+        if (k == this.root.key)
+            return root.getValue();
+        else if (k > root.key)
+            return (new WAVLTree(this.root.right).search(k));
+        else
+            return (new WAVLTree(this.root.left).search(k));
   }
-
+//TODO Nadine - Insert
   /**
    * public int insert(int k, String i)
    *
@@ -55,6 +68,7 @@ public class WAVLTree {
    * returns the number of rebalancing operations, or 0 if no rebalancing operations were needed.
    * returns -1 if an item with key k was not found in the tree.
    */
+   //TODO Noa - Delete
    public int delete(int k)
    {
            return 42;   // to be replaced by student code
@@ -66,6 +80,7 @@ public class WAVLTree {
     * Returns the info of the item with the smallest key in the tree,
     * or null if the tree is empty
     */
+   // TODO Nadine
    public String min()
    {
            return "42"; // to be replaced by student code
@@ -77,6 +92,7 @@ public class WAVLTree {
     * Returns the info of the item with the largest key in the tree,
     * or null if the tree is empty
     */
+   //TODO Noa
    public String max()
    {
            return "42"; // to be replaced by student code
@@ -88,6 +104,7 @@ public class WAVLTree {
    * Returns a sorted array which contains all keys in the tree,
    * or an empty array if the tree is empty.
    */
+   //TODO Nadine
    public int[] keysToArray()
    {
         int[] arr = new int[42]; // to be replaced by student code
@@ -101,6 +118,7 @@ public class WAVLTree {
    * sorted by their respective keys,
    * or an empty array if the tree is empty.
    */
+   // TODO Noa
    public String[] infoToArray()
    {
         String[] arr = new String[42]; // to be replaced by student code
@@ -113,6 +131,7 @@ public class WAVLTree {
     * Returns the number of nodes in the tree.
     *
     */
+   //TODO Nadine
    public int size()
    {
            return 42; // to be replaced by student code
@@ -126,7 +145,7 @@ public class WAVLTree {
     */
    public WAVLNode getRoot()
    {
-           return null;
+           return this.root;
    }
      /**
     * public int select(int i)
@@ -136,7 +155,8 @@ public class WAVLTree {
         * Example 2: select(size()) returns the value of the node with maximal key 
         * Example 3: select(2) returns the value 2nd smallest minimal node, i.e the value of the node minimal node's successor  
     *
-    */   
+    */
+     //TODO Nadine
    public String select(int i)
    {
            return null; 
@@ -149,10 +169,16 @@ public class WAVLTree {
 	  
 	  private int key;
 	  private String value;
+	  private WAVLNode left;
+	  private WAVLNode right;
+	  //private int rank;
 	  
 	  public WAVLNode(int key,String value) {
-		  this.key=key;
-		  this.value=value;
+		  this.key = key;
+		  this.value = value;
+		  this.right = null;
+		  this.left = null;
+
 		  
 	  }
 	  
@@ -162,21 +188,24 @@ public class WAVLTree {
 	  			}
                 public String getValue()
                 {
-                        return null; // to be replaced by student code
+                        return this.value;
                 }
                 public WAVLNode getLeft()
                 {
-                        return null; // to be replaced by student code
+                        return left;
                 }
                 public WAVLNode getRight()
                 {
-                        return null; // to be replaced by student code
+                        return right;
                 }
                 public boolean isInnerNode()
                 {
-                        return true; // to be replaced by student code
+                        if (left != null || right != null)
+                            return true;
+                        return false;
                 }
 
+                //TODO Required complexity: O(1), let's think about it later
                 public int getSubtreeSize()
                 {
                         return 42; // to be replaced by student code
