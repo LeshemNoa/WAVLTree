@@ -31,22 +31,29 @@ public class WAVLTree {
           return true;
       return false;
   }
-//TODO Doc, comments
  /**
    * public String search(int k)
    *
    * returns the info of an item with key k if it exists in the tree
-   * otherwise, returns null
+   * otherwise, returns null. We use a wrapper function that calls an overloaded
+   * search function with teo arguments: the key k and, the current node being inspected.
+   * We use recursive calls of the second function in order to use the BST property.
+   * Complexity analysis: we traverse a simple path from the root to the deepest leaf in the
+   * worst case. Hence the W.C. time complexity is O(h) = O(logn).
    */
-  public String search(int k)
-  {
-        if (k == this.root.key)
-            return root.getValue();
-        else if (k > root.key)
-            return (new WAVLTree(this.root.right).search(k));
-        else
-            return (new WAVLTree(this.root.left).search(k));
+  public String search(int k) {
+      return search(k, root);
   }
+
+  private String search(int k, WAVLNode node) {
+      if (k ==  node.key)
+          return node.value;
+      else if (k > node.key)
+          return search(k, node.right);
+      else
+          return search(k, node.left);
+  }
+
 //TODO Nadine - Insert
   /**
    * public int insert(int k, String i)
