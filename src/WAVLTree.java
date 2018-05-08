@@ -3,15 +3,14 @@
  * WAVLTree
  *
  * An implementation of a WAVL Tree.
- * (Haupler, Sen & Tarajan ‘15)
+ * (Haupler, Sen & Tarajan '15)
  *
  */
 
 public class WAVLTree {
-//TODO think about whether we need to maintain tree size explicitly
     private WAVLNode root;
 
-    //TODO overloaded constructor
+    //TODO constructor? overloaded constructor?
     /*public WAVLTree(int key, String value) {
         this.root = new WAVLNode(key, value);
     }*/
@@ -21,10 +20,12 @@ public class WAVLTree {
     }
 
     /**
+     * Returns node if the tree does not have any nodes in it, false otherwise.
+     *
+     * The function runs in O(1) time as it only checks whether a pointer is null or not.
      *
      * @return          true if tree is empty, otherwise false
      *
-     * Complexity analysis:
      */
   public boolean empty() {
       if (root == null)
@@ -33,10 +34,8 @@ public class WAVLTree {
   }
 
     /**
-     *
-     * @param k         the key being searched
-     * @return k.val    value associated with key k, or null if k is not
-     *                  in the tree.
+     * Searches the tree for key k and returns its value, or null if k isn't in
+     * the tree.
      *
      * Used as a wrapper function that passes k and the tree root to an overloaded
      * search function to search each subtree along the path from the root
@@ -45,25 +44,28 @@ public class WAVLTree {
      * This method runs in O(h) = O(logn) time as it traverses a simple path
      * from the root to the deepest leaf in the worst case.
      *
+     * @param k         the key being searched
+     * @return          value associated with key k, or null if k is not
+     *                  in the tree.
      */
   public String search(int k) {
       return search(k, root);
   }
 
     /**
-     *
-     * @param k         the key being searched
-     * @param node      node at the root of the subtree in which we search for k
-     * @return k.val    value associated with key k, or null if k is not
-     *                  in the tree.
+     * Search function with an additional node parameter.
      *
      * This method utilizes the BST property of the WAVL tree to move recursively
      * from a root node to one of its subtrees, according to k and the key held at
      * the node.
      *
+     * @param k         the key being searched
+     * @param node      node at the root of the subtree in which we search for k
+     * @return          value associated with key k, or null if k is not
+     *                  in the tree.
      */
   private String search(int k, WAVLNode node) {
-      if (k ==  node.key)
+      if (k == node.key)
           return node.value;
       else if (k > node.key && node.right != null)
           return search(k, node.right);
@@ -111,17 +113,30 @@ public class WAVLTree {
            return "42"; // to be replaced by student code
    }
 
-   /**
-    * public String max()
-    *
-    * Returns the info of the item with the largest key in the tree,
-    * or null if the tree is empty
-    */
-   //TODO Noa
-   public String max()
-   {
-           return "42"; // to be replaced by student code
+    /**
+     * Returns the value associated with the maximal key in the tree, or null if the
+     * tree is empty.
+     *
+     * As a result of the BST property of the WAVL tree, the greatest key in the
+     * tree will always be at the rightmost leaf. The function traverses the rightmost
+     * path in the tree until it is exhausted, then returns the node at the end of it.
+     *
+     * This function runs in O(h) = O(logn) time as it traverses a path from the root
+     * to the deepest leaf in the worst case.
+     *
+     * @return      the value associated with the maximal key in the tree
+     */
+   public String max() {
+       if (root == null)
+           return null;
+
+       WAVLNode curr = root;
+       while (curr.right != null) {
+           curr = curr.right;
+       }
+       return curr.value;
    }
+    
 
    /**
    * public int[] keysToArray()
