@@ -20,38 +20,56 @@ public class WAVLTree {
         this.root = node;
     }
 
-  /**
-   * public boolean empty()
-   *
-   * returns true if and only if the tree is empty
-   *
-   */
+    /**
+     *
+     * @return          true if tree is empty, otherwise false
+     *
+     * Complexity analysis:
+     */
   public boolean empty() {
       if (root == null)
           return true;
       return false;
   }
- /**
-   * public String search(int k)
-   *
-   * returns the info of an item with key k if it exists in the tree
-   * otherwise, returns null. We use a wrapper function that calls an overloaded
-   * search function with teo arguments: the key k and, the current node being inspected.
-   * We use recursive calls of the second function in order to use the BST property.
-   * Complexity analysis: we traverse a simple path from the root to the deepest leaf in the
-   * worst case. Hence the W.C. time complexity is O(h) = O(logn).
-   */
+
+    /**
+     *
+     * @param k         the key being searched
+     * @return k.val    value associated with key k, or null if k is not
+     *                  in the tree.
+     *
+     * Used as a wrapper function that passes k and the tree root to an overloaded
+     * search function to search each subtree along the path from the root
+     * to the required key.
+     *
+     * This method runs in O(h) = O(logn) time as it traverses a simple path
+     * from the root to the deepest leaf in the worst case.
+     *
+     */
   public String search(int k) {
       return search(k, root);
   }
 
+    /**
+     *
+     * @param k         the key being searched
+     * @param node      node at the root of the subtree in which we search for k
+     * @return k.val    value associated with key k, or null if k is not
+     *                  in the tree.
+     *
+     * This method utilizes the BST property of the WAVL tree to move recursively
+     * from a root node to one of its subtrees, according to k and the key held at
+     * the node.
+     *
+     */
   private String search(int k, WAVLNode node) {
       if (k ==  node.key)
           return node.value;
-      else if (k > node.key)
+      else if (k > node.key && node.right != null)
           return search(k, node.right);
-      else
+      else if (k < node.key && node.left != null)
           return search(k, node.left);
+      return null;
   }
 
 //TODO Nadine - Insert
