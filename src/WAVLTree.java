@@ -1,3 +1,6 @@
+import java.util.Arrays;
+import java.util.Iterator;
+
 /**
  *
  * WAVLTree
@@ -7,8 +10,9 @@
  *
  */
 
-public class WAVLTree {
+public class WAVLTree implements Iterable {
     private WAVLNode root;
+    private int treeSize;
 
     //TODO constructor? overloaded constructor?
     /*public WAVLTree(int key, String value) {
@@ -28,9 +32,7 @@ public class WAVLTree {
      *
      */
   public boolean empty() {
-      if (root == null)
-          return true;
-      return false;
+      return (root == null);
   }
 
     /**
@@ -87,7 +89,8 @@ public class WAVLTree {
           return 42;    // to be replaced by student code
    }
 
-   /**
+//TODO Noa - Delete
+  /**
    * public int delete(int k)
    *
    * deletes an item with key k from the binary tree, if it is there;
@@ -95,31 +98,62 @@ public class WAVLTree {
    * returns the number of rebalancing operations, or 0 if no rebalancing operations were needed.
    * returns -1 if an item with key k was not found in the tree.
    */
-   //TODO Noa - Delete
    public int delete(int k)
    {
            return 42;   // to be replaced by student code
    }
 
-   /**
-    * public String min()
-    *
-    * Returns the info of the item with the smallest key in the tree,
-    * or null if the tree is empty
-    */
-   // TODO Nadine
-   public String min()
-   {
-           return "42"; // to be replaced by student code
+
+    /**
+     * Returns the value associated with the minimal key in the tree, or null if the
+     * tree is empty.
+     *
+     * Used as a wrapper function that passes k and the tree root to an overloaded, more
+     * general min function, which finds the minimal key of the subtree whose root is the
+     * given node.
+     *
+     * This function runs in O(h) = O(logn) time as it traverses a path from the root
+     * to the deepest leaf in the worst case.
+     *
+     * @return      the value associated with the minimal key in the tree
+     */
+   public String min() {
+       return min(root);
    }
 
+    /**
+     * Returns the value associated with the minimal key in the tree, or null if the
+     * tree is empty.
+     *
+     * As a result of the BST property of the WAVL tree, the smallest key in the
+     * tree will always be at the leftmost node. The function traverses the leftmost
+     * path in the tree until it is exhausted, i.e. when there is no longer any node
+     * to the left, then returns the node at the end of it.
+     *
+     * @param node  the node at the root of the subtree of which the minimal key
+     *              is required
+     * @return      the value associated with the minimal key in the tree
+     */
+   private String min(WAVLNode node) {
+       if (node == null)
+           return null;
+
+       WAVLNode curr = node;
+       while (curr.left != null) {
+           curr = curr.left;
+       }
+       return curr.value;
+   }
+
+   //TODO Check this out and see if we need an overloaded option max() too
     /**
      * Returns the value associated with the maximal key in the tree, or null if the
      * tree is empty.
      *
      * As a result of the BST property of the WAVL tree, the greatest key in the
-     * tree will always be at the rightmost leaf. The function traverses the rightmost
-     * path in the tree until it is exhausted, then returns the node at the end of it.
+     * tree will always be at the rightmost node. The function traverses the rightmost
+     * path in the tree until it is exhausted, i.e. when there is no longer any node
+     * to the right, then returns the node at the end of it.
      *
      * This function runs in O(h) = O(logn) time as it traverses a path from the root
      * to the deepest leaf in the worst case.
@@ -127,7 +161,7 @@ public class WAVLTree {
      * @return      the value associated with the maximal key in the tree
      */
    public String max() {
-       if (root == null)
+       if (this.empty())
            return null;
 
        WAVLNode curr = root;
@@ -136,7 +170,41 @@ public class WAVLTree {
        }
        return curr.value;
    }
-    
+
+    @Override
+    public Iterator iterator() {
+        return new WAVLIterator();
+    }
+
+    private class WAVLIterator implements Iterator {
+        private int counter = 0;
+        private WAVLNode curr;
+
+        private WAVLIterator() {
+            this.curr = root;
+        }
+
+        @Override
+        public boolean hasNext() {
+            if (counter < treeSize)
+                return true;
+            return false;
+        }
+
+        /**
+         * Returns the next node in an in-order traversal of the tree.
+         *
+         * This function implements the Successor algorithm of the BST.
+         *
+         * @return the successor of the current node.
+         */
+
+        @Override
+        public WAVLNode next() {
+            if (curr.right != null)
+                return
+        }
+    }
 
    /**
    * public int[] keysToArray()
@@ -144,7 +212,8 @@ public class WAVLTree {
    * Returns a sorted array which contains all keys in the tree,
    * or an empty array if the tree is empty.
    */
-   //TODO Nadine
+
+//TODO Nadine
    public int[] keysToArray()
    {
         int[] arr = new int[42]; // to be replaced by student code
@@ -158,7 +227,8 @@ public class WAVLTree {
    * sorted by their respective keys,
    * or an empty array if the tree is empty.
    */
-   // TODO Noa
+
+// TODO Noa
    public String[] infoToArray()
    {
         String[] arr = new String[42]; // to be replaced by student code
@@ -171,7 +241,8 @@ public class WAVLTree {
     * Returns the number of nodes in the tree.
     *
     */
-   //TODO Nadine
+
+//TODO Nadine
    public int size()
    {
            return 42; // to be replaced by student code
@@ -187,7 +258,9 @@ public class WAVLTree {
    {
            return this.root;
    }
-     /**
+
+
+    /**
     * public int select(int i)
     *
     * Returns the value of the i'th smallest key (return -1 if tree is empty)
@@ -196,60 +269,64 @@ public class WAVLTree {
         * Example 3: select(2) returns the value 2nd smallest minimal node, i.e the value of the node minimal node's successor  
     *
     */
-     //TODO Nadine
+
+
+// TODO Nadine
    public String select(int i)
    {
            return null; 
    }
 
-   /**
+    /**
    * public class WAVLNode
    */
   public class WAVLNode{
 	  
-	  private int key;
-	  private String value;
-	  private WAVLNode left;
-	  private WAVLNode right;
-	  //private int rank;
-	  
-	  public WAVLNode(int key,String value) {
-		  this.key = key;
-		  this.value = value;
-		  this.right = null;
-		  this.left = null;
+    private int key;
+    private String value;
+    private WAVLNode left;
+    private WAVLNode right;
+    private int subtreeSize;
+    //private int rank;
 
-		  
-	  }
-	  
-	  			public int getKey()
-	  			{
-	  				return key; // to be replaced by student code
-	  			}
-                public String getValue()
-                {
-                        return this.value;
-                }
-                public WAVLNode getLeft()
-                {
-                        return left;
-                }
-                public WAVLNode getRight()
-                {
-                        return right;
-                }
-                public boolean isInnerNode()
-                {
-                        if (left != null || right != null)
-                            return true;
-                        return false;
-                }
+    public WAVLNode(int key,String value) {
+        this.key = key;
+        this.value = value;
+        this.right = null;
+        this.left = null;
+        this.subtreeSize = 0;
+    }
 
-                //TODO Required complexity: O(1), let's think about it later
-                public int getSubtreeSize()
-                {
-                        return 42; // to be replaced by student code
-                }
+    public int getKey() {
+        return key;
+    }
+
+    public String getValue()
+    {
+        return this.value;
+    }
+    public WAVLNode getLeft()
+    {
+        return left;
+    }
+    public WAVLNode getRight()
+    {
+        return right;
+    }
+    public boolean isInnerNode()
+    {
+        if (left != null || right != null)
+            return true;
+        return false;
+    }
+
+//TODO Required complexity: O(1), let's think about it later
+    public int getSubtreeSize()
+    {
+        return 42; // to be replaced by student code
+    }
+
+
   }
 
 }
