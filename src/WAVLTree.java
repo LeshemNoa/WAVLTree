@@ -245,14 +245,27 @@ public class WAVLTree implements Iterable {
     }
 
     /**
-     * Returns a sorted array of the tree's keys.
+     * Returns a sorted array of the tree's keys, or an empty array if the tree is empty.
+     *
+     * The function runs in O(nlogn) in time as in the worst case, as it performs n cosecutive
+     * Successor calls with worst case runtime complexity of O(logn). However, in HW2 we proved
+     * that a tighter complexity bound would be O(n+h) = O(n+logn) = O(n).
      *
      * @return      array of the tree's keys in ascending order
      */
-   public int[] keysToArray()
-   {
-        int[] arr = new int[42]; // to be replaced by student code
-        return arr;              // to be replaced by student code
+   public int[] keysToArray() {
+       List<Integer> sortedKeys = new ArrayList<>();
+       WAVLIterator iter = new WAVLIterator();
+
+       while (iter.hasNext()) {
+           sortedKeys.add(iter.next().key);
+       }
+
+       /* Due to Java's problematic handling of primitive types, unboxing, arrays and generics,
+        * a List<Integer> cannot be directly converted to int[], so we use Java 8 streams instead.*/
+       return sortedKeys.stream().mapToInt(i->i).toArray();
+
+
    }
 
     /**
@@ -292,7 +305,7 @@ public class WAVLTree implements Iterable {
            return 42; // to be replaced by student code
    }
    
-     /**
+    /**
     * public WAVLNode getRoot()
     *
     * Returns the root WAVL node, or null if the tree is empty
