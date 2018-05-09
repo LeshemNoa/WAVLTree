@@ -1,5 +1,4 @@
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
 
@@ -41,9 +40,9 @@ public class WAVLTree implements Iterable {
      * Searches the tree for key k and returns its value, or null if k isn't in
      * the tree.
      *
-     * Used as a wrapper function that passes k and the tree root to an overloaded
-     * search function to search each subtree along the path from the root
-     * to the required key.
+     * Used as a wrapper function that passes k and the tree root to findNode,
+     * another, more general search function, to search each subtree along the path
+     * from the root to the required key.
      *
      * This method runs in O(h) = O(logn) time as it traverses a simple path
      * from the root to the deepest leaf in the worst case.
@@ -53,28 +52,33 @@ public class WAVLTree implements Iterable {
      *                  in the tree.
      */
   public String search(int k) {
-      return search(k, root);
+      WAVLNode found = findNode(k, root);
+      if (found != null)
+          return found.value;
+      return null;
   }
 
     /**
-     * Search function with an additional node parameter.
+     * Search function with an additional node parameter. Returns a node.
      *
      * This method utilizes the BST property of the WAVL tree to move recursively
      * from a root node to one of its subtrees, according to k and the key held at
      * the node.
      *
+     * This method runs in O(h) = O(logn) time as it traverses a simple path
+     * from the root to the deepest leaf in the worst case.
+     *
      * @param k         the key being searched
      * @param node      node at the root of the subtree in which we search for k
-     * @return          value associated with key k, or null if k is not
-     *                  in the tree.
+     * @return          node with key k, or null if k is not in the tree.
      */
-  private String search(int k, WAVLNode node) {
+  private WAVLNode findNode(int k, WAVLNode node) {
       if (k == node.key)
-          return node.value;
+          return node;
       else if (k > node.key && node.right != null)
-          return search(k, node.right);
+          return findNode(k, node.right);
       else if (k < node.key && node.left != null)
-          return search(k, node.left);
+          return findNode(k, node.left);
       return null;
   }
 
@@ -92,6 +96,7 @@ public class WAVLTree implements Iterable {
    }
 
 //TODO Noa - Delete
+
   /**
    * public int delete(int k)
    *
@@ -104,6 +109,8 @@ public class WAVLTree implements Iterable {
    {
            return 42;   // to be replaced by student code
    }
+
+
 
 
     /**
@@ -346,7 +353,7 @@ public class WAVLTree implements Iterable {
     private WAVLNode right;
     private WAVLNode parent;
     private int subtreeSize;
-    //private int rank;
+    private int rank;
 
     public WAVLNode(int key,String value) {
         this.key = key;
