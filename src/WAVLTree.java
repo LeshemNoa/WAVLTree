@@ -19,7 +19,7 @@ public class WAVLTree implements Iterable {
     public WAVLTree(int key, String value) {
         this.root = new WAVLNode(key, value);
     }
-
+// added by nadine
     public WAVLTree() {
         this.root = null;
         this.treeSize=0;
@@ -56,17 +56,15 @@ public class WAVLTree implements Iterable {
      *                  in the tree.
      */
   public String search(int k) {
-<<<<<<< HEAD
+// added by nadine empty condition
 	  if (empty()) {
 		  return null;
 	  }
-      return search(k, root);
-=======
       WAVLNode found = findNode(k, root);
       if (found != null)
           return found.value;
       return null;
->>>>>>> 187e787571493db7da5b31dfc75934d035e8f205
+
   }
 
     /**
@@ -94,6 +92,7 @@ public class WAVLTree implements Iterable {
   }
 
 //TODO Nadine - Insert
+  // nadine: created this new method.
   /**
    * public int insert(int k, String i)
    *
@@ -109,6 +108,7 @@ public class WAVLTree implements Iterable {
 	   WAVLNode newnode= new WAVLNode(k,i);
 	   insert(newnode,root);
 	   return 0;
+	   //nadine: not finished yet. depends on rotation method.
 	   
    }
    /** Search function with an additional node parameter*/  
@@ -117,7 +117,6 @@ public class WAVLTree implements Iterable {
 	            root = toInsert;
 	            return;
 	        }
-
 	        if (toInsert.key < node.key) {
 	            if (node.left != null) {
 	                insert(toInsert, node.left);
@@ -135,7 +134,7 @@ public class WAVLTree implements Iterable {
 	                node.right = toInsert;
 	            }
 	        }
-	        updateRank(toInsert);
+	        promote(toInsert);
 	      // maybe  balance method is needed check later
 	    }
 
@@ -150,7 +149,7 @@ public class WAVLTree implements Iterable {
   * 
   */
    
-   private void updateRank(WAVLNode node) {
+   private void promote(WAVLNode node) {
        if (node == null) {
            return;
        }
@@ -166,7 +165,7 @@ public class WAVLTree implements Iterable {
     		  // rotation method needed 
     	   }
        }else {
-    	   updateRank(node.parent);
+    	   promote(node.parent);
        }
       
    }
@@ -397,11 +396,31 @@ public class WAVLTree implements Iterable {
     *
     */
 
-//TODO Nadine
+//returns how many nodes are in a tree. 
    public int size()
    {
-           return 42; // to be replaced by student code
+	   return size_Node(root);
    }
+ //returns how many nodes are in a specific node.  
+   public int size_Node(WAVLNode node) {
+	   
+	        if (empty()) {
+	            return 0;
+	        }
+	        int left = 0, right = 0;
+	        if (node.left != null) {
+	            left = size_Node(node.left);
+	        }
+	        if (node.right != null) {
+	            right = size_Node(node.right);
+	        }
+	        node.setSize(left+right + 1);
+	        return node.size;
+	    }
+	   
+	   
+	   
+  
    
     /**
     * public WAVLNode getRoot()
@@ -436,6 +455,9 @@ public class WAVLTree implements Iterable {
     /**
    * public class WAVLNode
    */
+   // size is added because there was a function above to complete. if we can
+   // delete things maybe there is no use for size.
+   // rank is added, parent
   public class WAVLNode{
 	  
     private WAVLNode parent;
@@ -443,9 +465,9 @@ public class WAVLTree implements Iterable {
     private String value;
     private WAVLNode left;
     private WAVLNode right;
-    //private WAVLNode parent;
     private int subtreeSize;
     private int rank;
+    private int size;
 
     public WAVLNode(int key,String value) {
         this.key = key;
@@ -455,6 +477,7 @@ public class WAVLTree implements Iterable {
         this.parent = null;
         this.subtreeSize = 0;
         this.rank=1;
+        this.size=0;
     }
 
     public int getKey() {
@@ -481,25 +504,34 @@ public class WAVLTree implements Iterable {
     }
 
 //TODO Required complexity: O(1), let's think about it later
+    // why is this function here ? it should be a tree function i think
     public int getSubtreeSize()
     {
         return 42; // to be replaced by student code
     }
-
+// new
 	public WAVLNode getParent() {
 		return parent;
 	}
-
+//new
 	public void setParent(WAVLNode parent) {
 		this.parent = parent;
 	}
-
+//new
 	public int getRank() {
 		return rank;
 	}
-
+//new
 	public void setRank(int addrank) {
 		this.rank = rank+addrank;
+	}
+//new
+	public int getSize() {
+		return size;
+	}
+//new
+	public void setSize(int size) {
+		this.size = size;
 	}
 
 
