@@ -20,36 +20,47 @@
       <file leaf-file-name="WAVLTree.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/WAVLTree.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="537">
-              <caret line="267" column="0" lean-forward="true" selection-start-line="267" selection-start-column="0" selection-end-line="267" selection-end-column="0" />
+            <state relative-caret-position="1087">
+              <caret line="121" column="31" lean-forward="true" selection-start-line="121" selection-start-column="31" selection-end-line="121" selection-end-column="31" />
               <folding>
                 <element signature="imports" expanded="true" />
-                <element signature="e#816#817#0" expanded="true" />
-                <element signature="e#849#850#0" expanded="true" />
-                <element signature="e#1496#1497#0" expanded="true" />
-                <element signature="e#1530#1531#0" expanded="true" />
-                <element signature="e#3861#3862#0" expanded="true" />
-                <element signature="e#3908#3909#0" expanded="true" />
-                <element signature="e#5765#5766#0" expanded="true" />
-                <element signature="e#5806#5807#0" expanded="true" />
-                <element signature="e#6434#6435#0" expanded="true" />
-                <element signature="e#6474#6475#0" expanded="true" />
-                <element signature="e#6716#6717#0" expanded="true" />
-                <element signature="e#6767#6768#0" expanded="true" />
-                <element signature="e#10283#10284#0" expanded="true" />
-                <element signature="e#10317#10318#0" expanded="true" />
-                <element signature="e#10796#10797#0" expanded="true" />
-                <element signature="e#10826#10827#0" expanded="true" />
-                <element signature="e#11322#11323#0" expanded="true" />
-                <element signature="e#11348#11349#0" expanded="true" />
-                <element signature="e#11384#11385#0" expanded="true" />
-                <element signature="e#11417#11418#0" expanded="true" />
-                <element signature="e#11453#11454#0" expanded="true" />
-                <element signature="e#11480#11481#0" expanded="true" />
-                <element signature="e#11517#11518#0" expanded="true" />
-                <element signature="e#11545#11546#0" expanded="true" />
-                <element signature="e#11780#11781#0" expanded="true" />
-                <element signature="e#11839#11840#0" expanded="true" />
+                <element signature="e#791#792#0" expanded="true" />
+                <element signature="e#824#825#0" expanded="true" />
+                <element signature="docComment;method#search#0;class#WAVLTree#0" expanded="false" />
+                <element signature="docComment;method#findNode#0;class#WAVLTree#0" expanded="false" />
+                <element signature="docComment;method#insert#0;class#WAVLTree#0" expanded="false" />
+                <element signature="e#4070#4071#0" expanded="true" />
+                <element signature="e#4117#4118#0" expanded="true" />
+                <element signature="docComment;method#nodeWithMinKey#0;class#WAVLTree#0" expanded="false" />
+                <element signature="docComment;method#max#0;class#WAVLTree#0" expanded="false" />
+                <element signature="e#5974#5975#0" expanded="true" />
+                <element signature="e#6015#6016#0" expanded="true" />
+                <element signature="docComment;class#WAVLIterator#0;class#WAVLTree#0" expanded="false" />
+                <element signature="e#6643#6644#0" expanded="true" />
+                <element signature="e#6683#6684#0" expanded="true" />
+                <element signature="docComment;method#hasNext#0;class#WAVLIterator#0;class#WAVLTree#0" expanded="false" />
+                <element signature="e#6925#6926#0" expanded="true" />
+                <element signature="e#6976#6977#0" expanded="true" />
+                <element signature="docComment;method#next#0;class#WAVLIterator#0;class#WAVLTree#0" expanded="false" />
+                <element signature="docComment;method#keysToArray#0;class#WAVLTree#0" expanded="false" />
+                <element signature="docComment;method#infoToArray#0;class#WAVLTree#0" expanded="false" />
+                <element signature="docComment;method#size#0;class#WAVLTree#0" expanded="false" />
+                <element signature="docComment;method#getRoot#0;class#WAVLTree#0" expanded="false" />
+                <element signature="e#10492#10493#0" expanded="true" />
+                <element signature="e#10526#10527#0" expanded="true" />
+                <element signature="docComment;method#select#0;class#WAVLTree#0" expanded="false" />
+                <element signature="e#11005#11006#0" expanded="true" />
+                <element signature="e#11035#11036#0" expanded="true" />
+                <element signature="e#11529#11530#0" expanded="true" />
+                <element signature="e#11555#11556#0" expanded="true" />
+                <element signature="e#11591#11592#0" expanded="true" />
+                <element signature="e#11624#11625#0" expanded="true" />
+                <element signature="e#11660#11661#0" expanded="true" />
+                <element signature="e#11687#11688#0" expanded="true" />
+                <element signature="e#11724#11725#0" expanded="true" />
+                <element signature="e#11752#11753#0" expanded="true" />
+                <element signature="e#11987#11988#0" expanded="true" />
+                <element signature="e#12046#12047#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -251,12 +262,12 @@
       <option name="presentableId" value="Default" />
       <updated>1525348531230</updated>
       <workItem from="1525348532769" duration="753000" />
-      <workItem from="1525703646634" duration="21588000" />
+      <workItem from="1525703646634" duration="24679000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="25357000" />
+    <option name="totallyTimeSpent" value="28448000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="0" y="0" width="1440" height="900" extended-state="6" />
@@ -269,7 +280,7 @@
       <window_info id="Capture Analysis" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
       <window_info id="Maven Projects" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
-      <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32971016" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32971016" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Capture Tool" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
@@ -309,32 +320,43 @@
           <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding>
             <element signature="imports" expanded="true" />
-            <element signature="e#816#817#0" expanded="true" />
-            <element signature="e#849#850#0" expanded="true" />
-            <element signature="e#1496#1497#0" expanded="true" />
-            <element signature="e#1530#1531#0" expanded="true" />
-            <element signature="e#3861#3862#0" expanded="true" />
-            <element signature="e#3908#3909#0" expanded="true" />
-            <element signature="e#5765#5766#0" expanded="true" />
-            <element signature="e#5806#5807#0" expanded="true" />
-            <element signature="e#6434#6435#0" expanded="true" />
-            <element signature="e#6474#6475#0" expanded="true" />
-            <element signature="e#6716#6717#0" expanded="true" />
-            <element signature="e#6767#6768#0" expanded="true" />
-            <element signature="e#10283#10284#0" expanded="true" />
-            <element signature="e#10317#10318#0" expanded="true" />
-            <element signature="e#10796#10797#0" expanded="true" />
-            <element signature="e#10826#10827#0" expanded="true" />
-            <element signature="e#11322#11323#0" expanded="true" />
-            <element signature="e#11348#11349#0" expanded="true" />
-            <element signature="e#11384#11385#0" expanded="true" />
-            <element signature="e#11417#11418#0" expanded="true" />
-            <element signature="e#11453#11454#0" expanded="true" />
-            <element signature="e#11480#11481#0" expanded="true" />
-            <element signature="e#11517#11518#0" expanded="true" />
-            <element signature="e#11545#11546#0" expanded="true" />
-            <element signature="e#11780#11781#0" expanded="true" />
-            <element signature="e#11839#11840#0" expanded="true" />
+            <element signature="e#791#792#0" expanded="true" />
+            <element signature="e#824#825#0" expanded="true" />
+            <element signature="docComment;method#search#0;class#WAVLTree#0" expanded="false" />
+            <element signature="docComment;method#findNode#0;class#WAVLTree#0" expanded="false" />
+            <element signature="docComment;method#insert#0;class#WAVLTree#0" expanded="false" />
+            <element signature="e#4070#4071#0" expanded="true" />
+            <element signature="e#4117#4118#0" expanded="true" />
+            <element signature="docComment;method#nodeWithMinKey#0;class#WAVLTree#0" expanded="false" />
+            <element signature="docComment;method#max#0;class#WAVLTree#0" expanded="false" />
+            <element signature="e#5974#5975#0" expanded="true" />
+            <element signature="e#6015#6016#0" expanded="true" />
+            <element signature="docComment;class#WAVLIterator#0;class#WAVLTree#0" expanded="false" />
+            <element signature="e#6643#6644#0" expanded="true" />
+            <element signature="e#6683#6684#0" expanded="true" />
+            <element signature="docComment;method#hasNext#0;class#WAVLIterator#0;class#WAVLTree#0" expanded="false" />
+            <element signature="e#6925#6926#0" expanded="true" />
+            <element signature="e#6976#6977#0" expanded="true" />
+            <element signature="docComment;method#next#0;class#WAVLIterator#0;class#WAVLTree#0" expanded="false" />
+            <element signature="docComment;method#keysToArray#0;class#WAVLTree#0" expanded="false" />
+            <element signature="docComment;method#infoToArray#0;class#WAVLTree#0" expanded="false" />
+            <element signature="docComment;method#size#0;class#WAVLTree#0" expanded="false" />
+            <element signature="docComment;method#getRoot#0;class#WAVLTree#0" expanded="false" />
+            <element signature="e#10492#10493#0" expanded="true" />
+            <element signature="e#10526#10527#0" expanded="true" />
+            <element signature="docComment;method#select#0;class#WAVLTree#0" expanded="false" />
+            <element signature="e#11005#11006#0" expanded="true" />
+            <element signature="e#11035#11036#0" expanded="true" />
+            <element signature="e#11529#11530#0" expanded="true" />
+            <element signature="e#11555#11556#0" expanded="true" />
+            <element signature="e#11591#11592#0" expanded="true" />
+            <element signature="e#11624#11625#0" expanded="true" />
+            <element signature="e#11660#11661#0" expanded="true" />
+            <element signature="e#11687#11688#0" expanded="true" />
+            <element signature="e#11724#11725#0" expanded="true" />
+            <element signature="e#11752#11753#0" expanded="true" />
+            <element signature="e#11987#11988#0" expanded="true" />
+            <element signature="e#12046#12047#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -345,32 +367,43 @@
           <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding>
             <element signature="imports" expanded="true" />
-            <element signature="e#816#817#0" expanded="true" />
-            <element signature="e#849#850#0" expanded="true" />
-            <element signature="e#1496#1497#0" expanded="true" />
-            <element signature="e#1530#1531#0" expanded="true" />
-            <element signature="e#3861#3862#0" expanded="true" />
-            <element signature="e#3908#3909#0" expanded="true" />
-            <element signature="e#5765#5766#0" expanded="true" />
-            <element signature="e#5806#5807#0" expanded="true" />
-            <element signature="e#6434#6435#0" expanded="true" />
-            <element signature="e#6474#6475#0" expanded="true" />
-            <element signature="e#6716#6717#0" expanded="true" />
-            <element signature="e#6767#6768#0" expanded="true" />
-            <element signature="e#10283#10284#0" expanded="true" />
-            <element signature="e#10317#10318#0" expanded="true" />
-            <element signature="e#10796#10797#0" expanded="true" />
-            <element signature="e#10826#10827#0" expanded="true" />
-            <element signature="e#11322#11323#0" expanded="true" />
-            <element signature="e#11348#11349#0" expanded="true" />
-            <element signature="e#11384#11385#0" expanded="true" />
-            <element signature="e#11417#11418#0" expanded="true" />
-            <element signature="e#11453#11454#0" expanded="true" />
-            <element signature="e#11480#11481#0" expanded="true" />
-            <element signature="e#11517#11518#0" expanded="true" />
-            <element signature="e#11545#11546#0" expanded="true" />
-            <element signature="e#11780#11781#0" expanded="true" />
-            <element signature="e#11839#11840#0" expanded="true" />
+            <element signature="e#791#792#0" expanded="true" />
+            <element signature="e#824#825#0" expanded="true" />
+            <element signature="docComment;method#search#0;class#WAVLTree#0" expanded="false" />
+            <element signature="docComment;method#findNode#0;class#WAVLTree#0" expanded="false" />
+            <element signature="docComment;method#insert#0;class#WAVLTree#0" expanded="false" />
+            <element signature="e#4070#4071#0" expanded="true" />
+            <element signature="e#4117#4118#0" expanded="true" />
+            <element signature="docComment;method#nodeWithMinKey#0;class#WAVLTree#0" expanded="false" />
+            <element signature="docComment;method#max#0;class#WAVLTree#0" expanded="false" />
+            <element signature="e#5974#5975#0" expanded="true" />
+            <element signature="e#6015#6016#0" expanded="true" />
+            <element signature="docComment;class#WAVLIterator#0;class#WAVLTree#0" expanded="false" />
+            <element signature="e#6643#6644#0" expanded="true" />
+            <element signature="e#6683#6684#0" expanded="true" />
+            <element signature="docComment;method#hasNext#0;class#WAVLIterator#0;class#WAVLTree#0" expanded="false" />
+            <element signature="e#6925#6926#0" expanded="true" />
+            <element signature="e#6976#6977#0" expanded="true" />
+            <element signature="docComment;method#next#0;class#WAVLIterator#0;class#WAVLTree#0" expanded="false" />
+            <element signature="docComment;method#keysToArray#0;class#WAVLTree#0" expanded="false" />
+            <element signature="docComment;method#infoToArray#0;class#WAVLTree#0" expanded="false" />
+            <element signature="docComment;method#size#0;class#WAVLTree#0" expanded="false" />
+            <element signature="docComment;method#getRoot#0;class#WAVLTree#0" expanded="false" />
+            <element signature="e#10492#10493#0" expanded="true" />
+            <element signature="e#10526#10527#0" expanded="true" />
+            <element signature="docComment;method#select#0;class#WAVLTree#0" expanded="false" />
+            <element signature="e#11005#11006#0" expanded="true" />
+            <element signature="e#11035#11036#0" expanded="true" />
+            <element signature="e#11529#11530#0" expanded="true" />
+            <element signature="e#11555#11556#0" expanded="true" />
+            <element signature="e#11591#11592#0" expanded="true" />
+            <element signature="e#11624#11625#0" expanded="true" />
+            <element signature="e#11660#11661#0" expanded="true" />
+            <element signature="e#11687#11688#0" expanded="true" />
+            <element signature="e#11724#11725#0" expanded="true" />
+            <element signature="e#11752#11753#0" expanded="true" />
+            <element signature="e#11987#11988#0" expanded="true" />
+            <element signature="e#12046#12047#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -382,32 +415,43 @@
           <caret line="32" column="5" lean-forward="false" selection-start-line="32" selection-start-column="5" selection-end-line="32" selection-end-column="5" />
           <folding>
             <element signature="imports" expanded="true" />
-            <element signature="e#816#817#0" expanded="true" />
-            <element signature="e#849#850#0" expanded="true" />
-            <element signature="e#1496#1497#0" expanded="true" />
-            <element signature="e#1530#1531#0" expanded="true" />
-            <element signature="e#3861#3862#0" expanded="true" />
-            <element signature="e#3908#3909#0" expanded="true" />
-            <element signature="e#5765#5766#0" expanded="true" />
-            <element signature="e#5806#5807#0" expanded="true" />
-            <element signature="e#6434#6435#0" expanded="true" />
-            <element signature="e#6474#6475#0" expanded="true" />
-            <element signature="e#6716#6717#0" expanded="true" />
-            <element signature="e#6767#6768#0" expanded="true" />
-            <element signature="e#10283#10284#0" expanded="true" />
-            <element signature="e#10317#10318#0" expanded="true" />
-            <element signature="e#10796#10797#0" expanded="true" />
-            <element signature="e#10826#10827#0" expanded="true" />
-            <element signature="e#11322#11323#0" expanded="true" />
-            <element signature="e#11348#11349#0" expanded="true" />
-            <element signature="e#11384#11385#0" expanded="true" />
-            <element signature="e#11417#11418#0" expanded="true" />
-            <element signature="e#11453#11454#0" expanded="true" />
-            <element signature="e#11480#11481#0" expanded="true" />
-            <element signature="e#11517#11518#0" expanded="true" />
-            <element signature="e#11545#11546#0" expanded="true" />
-            <element signature="e#11780#11781#0" expanded="true" />
-            <element signature="e#11839#11840#0" expanded="true" />
+            <element signature="e#791#792#0" expanded="true" />
+            <element signature="e#824#825#0" expanded="true" />
+            <element signature="docComment;method#search#0;class#WAVLTree#0" expanded="false" />
+            <element signature="docComment;method#findNode#0;class#WAVLTree#0" expanded="false" />
+            <element signature="docComment;method#insert#0;class#WAVLTree#0" expanded="false" />
+            <element signature="e#4070#4071#0" expanded="true" />
+            <element signature="e#4117#4118#0" expanded="true" />
+            <element signature="docComment;method#nodeWithMinKey#0;class#WAVLTree#0" expanded="false" />
+            <element signature="docComment;method#max#0;class#WAVLTree#0" expanded="false" />
+            <element signature="e#5974#5975#0" expanded="true" />
+            <element signature="e#6015#6016#0" expanded="true" />
+            <element signature="docComment;class#WAVLIterator#0;class#WAVLTree#0" expanded="false" />
+            <element signature="e#6643#6644#0" expanded="true" />
+            <element signature="e#6683#6684#0" expanded="true" />
+            <element signature="docComment;method#hasNext#0;class#WAVLIterator#0;class#WAVLTree#0" expanded="false" />
+            <element signature="e#6925#6926#0" expanded="true" />
+            <element signature="e#6976#6977#0" expanded="true" />
+            <element signature="docComment;method#next#0;class#WAVLIterator#0;class#WAVLTree#0" expanded="false" />
+            <element signature="docComment;method#keysToArray#0;class#WAVLTree#0" expanded="false" />
+            <element signature="docComment;method#infoToArray#0;class#WAVLTree#0" expanded="false" />
+            <element signature="docComment;method#size#0;class#WAVLTree#0" expanded="false" />
+            <element signature="docComment;method#getRoot#0;class#WAVLTree#0" expanded="false" />
+            <element signature="e#10492#10493#0" expanded="true" />
+            <element signature="e#10526#10527#0" expanded="true" />
+            <element signature="docComment;method#select#0;class#WAVLTree#0" expanded="false" />
+            <element signature="e#11005#11006#0" expanded="true" />
+            <element signature="e#11035#11036#0" expanded="true" />
+            <element signature="e#11529#11530#0" expanded="true" />
+            <element signature="e#11555#11556#0" expanded="true" />
+            <element signature="e#11591#11592#0" expanded="true" />
+            <element signature="e#11624#11625#0" expanded="true" />
+            <element signature="e#11660#11661#0" expanded="true" />
+            <element signature="e#11687#11688#0" expanded="true" />
+            <element signature="e#11724#11725#0" expanded="true" />
+            <element signature="e#11752#11753#0" expanded="true" />
+            <element signature="e#11987#11988#0" expanded="true" />
+            <element signature="e#12046#12047#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -447,36 +491,47 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/WAVLTree.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="537">
-          <caret line="267" column="0" lean-forward="true" selection-start-line="267" selection-start-column="0" selection-end-line="267" selection-end-column="0" />
+        <state relative-caret-position="1087">
+          <caret line="121" column="31" lean-forward="true" selection-start-line="121" selection-start-column="31" selection-end-line="121" selection-end-column="31" />
           <folding>
             <element signature="imports" expanded="true" />
-            <element signature="e#816#817#0" expanded="true" />
-            <element signature="e#849#850#0" expanded="true" />
-            <element signature="e#1496#1497#0" expanded="true" />
-            <element signature="e#1530#1531#0" expanded="true" />
-            <element signature="e#3861#3862#0" expanded="true" />
-            <element signature="e#3908#3909#0" expanded="true" />
-            <element signature="e#5765#5766#0" expanded="true" />
-            <element signature="e#5806#5807#0" expanded="true" />
-            <element signature="e#6434#6435#0" expanded="true" />
-            <element signature="e#6474#6475#0" expanded="true" />
-            <element signature="e#6716#6717#0" expanded="true" />
-            <element signature="e#6767#6768#0" expanded="true" />
-            <element signature="e#10283#10284#0" expanded="true" />
-            <element signature="e#10317#10318#0" expanded="true" />
-            <element signature="e#10796#10797#0" expanded="true" />
-            <element signature="e#10826#10827#0" expanded="true" />
-            <element signature="e#11322#11323#0" expanded="true" />
-            <element signature="e#11348#11349#0" expanded="true" />
-            <element signature="e#11384#11385#0" expanded="true" />
-            <element signature="e#11417#11418#0" expanded="true" />
-            <element signature="e#11453#11454#0" expanded="true" />
-            <element signature="e#11480#11481#0" expanded="true" />
-            <element signature="e#11517#11518#0" expanded="true" />
-            <element signature="e#11545#11546#0" expanded="true" />
-            <element signature="e#11780#11781#0" expanded="true" />
-            <element signature="e#11839#11840#0" expanded="true" />
+            <element signature="e#791#792#0" expanded="true" />
+            <element signature="e#824#825#0" expanded="true" />
+            <element signature="docComment;method#search#0;class#WAVLTree#0" expanded="false" />
+            <element signature="docComment;method#findNode#0;class#WAVLTree#0" expanded="false" />
+            <element signature="docComment;method#insert#0;class#WAVLTree#0" expanded="false" />
+            <element signature="e#4070#4071#0" expanded="true" />
+            <element signature="e#4117#4118#0" expanded="true" />
+            <element signature="docComment;method#nodeWithMinKey#0;class#WAVLTree#0" expanded="false" />
+            <element signature="docComment;method#max#0;class#WAVLTree#0" expanded="false" />
+            <element signature="e#5974#5975#0" expanded="true" />
+            <element signature="e#6015#6016#0" expanded="true" />
+            <element signature="docComment;class#WAVLIterator#0;class#WAVLTree#0" expanded="false" />
+            <element signature="e#6643#6644#0" expanded="true" />
+            <element signature="e#6683#6684#0" expanded="true" />
+            <element signature="docComment;method#hasNext#0;class#WAVLIterator#0;class#WAVLTree#0" expanded="false" />
+            <element signature="e#6925#6926#0" expanded="true" />
+            <element signature="e#6976#6977#0" expanded="true" />
+            <element signature="docComment;method#next#0;class#WAVLIterator#0;class#WAVLTree#0" expanded="false" />
+            <element signature="docComment;method#keysToArray#0;class#WAVLTree#0" expanded="false" />
+            <element signature="docComment;method#infoToArray#0;class#WAVLTree#0" expanded="false" />
+            <element signature="docComment;method#size#0;class#WAVLTree#0" expanded="false" />
+            <element signature="docComment;method#getRoot#0;class#WAVLTree#0" expanded="false" />
+            <element signature="e#10492#10493#0" expanded="true" />
+            <element signature="e#10526#10527#0" expanded="true" />
+            <element signature="docComment;method#select#0;class#WAVLTree#0" expanded="false" />
+            <element signature="e#11005#11006#0" expanded="true" />
+            <element signature="e#11035#11036#0" expanded="true" />
+            <element signature="e#11529#11530#0" expanded="true" />
+            <element signature="e#11555#11556#0" expanded="true" />
+            <element signature="e#11591#11592#0" expanded="true" />
+            <element signature="e#11624#11625#0" expanded="true" />
+            <element signature="e#11660#11661#0" expanded="true" />
+            <element signature="e#11687#11688#0" expanded="true" />
+            <element signature="e#11724#11725#0" expanded="true" />
+            <element signature="e#11752#11753#0" expanded="true" />
+            <element signature="e#11987#11988#0" expanded="true" />
+            <element signature="e#12046#12047#0" expanded="true" />
           </folding>
         </state>
       </provider>
