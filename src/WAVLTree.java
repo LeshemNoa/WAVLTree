@@ -19,7 +19,7 @@ public class WAVLTree implements Iterable {
     public WAVLTree(int key, String value) {
         this.root = new WAVLNode(key, value);
     }
-// added by nadine
+
     public WAVLTree() {
         this.root = null;
         this.treeSize=0;
@@ -56,15 +56,10 @@ public class WAVLTree implements Iterable {
      *                  in the tree.
      */
   public String search(int k) {
-// added by nadine empty condition
-	  if (empty()) {
-		  return null;
-	  }
       WAVLNode found = findNode(k, root);
       if (found != null)
           return found.value;
       return null;
-
   }
 
     /**
@@ -628,10 +623,6 @@ public void rotateRight(WAVLNode node) {
 		this.balance = balance;
 	}
 
-  }
-  
-  public static void main(String[] args) {
-	  
   }
 
 }
