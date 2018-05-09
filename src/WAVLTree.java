@@ -17,10 +17,14 @@ public class WAVLTree implements Iterable {
     private int treeSize;
 
     //TODO constructor? overloaded constructor?
-    /*public WAVLTree(int key, String value) {
+    public WAVLTree(int key, String value) {
         this.root = new WAVLNode(key, value);
-    }*/
+    }
 
+    public WAVLTree() {
+        this.root = null;
+        this.treeSize=0;
+    }
     public WAVLTree(WAVLNode node) {
         this.root = node;
     }
@@ -53,6 +57,9 @@ public class WAVLTree implements Iterable {
      *                  in the tree.
      */
   public String search(int k) {
+	  if (empty()) {
+		  return null;
+	  }
       return search(k, root);
   }
 
@@ -87,10 +94,76 @@ public class WAVLTree implements Iterable {
    * returns the number of rebalancing operations, or 0 if no rebalancing operations were necessary.
    * returns -1 if an item with key k already exists in the tree.
    */
-   public int insert(int k, String i) {
-          return 42;    // to be replaced by student code
-   }
+  
 
+   public int insert(int k, String i) {
+	   
+	   WAVLNode newnode= new WAVLNode(k,i);
+	   insert(newnode,root);
+	   return 0;
+	   
+   }
+   /** Search function with an additional node parameter*/  
+   public void insert(WAVLNode toInsert, WAVLNode node) {
+	        if (root == null) {
+	            root = toInsert;
+	            return;
+	        }
+
+	        if (toInsert.key < node.key) {
+	            if (node.left != null) {
+	                insert(toInsert, node.left);
+	                return;
+	            } else {
+	                toInsert.setFather(node);
+	                node.left = toInsert;
+	            }
+	        } else if (toInsert.key >= node.key) {
+	            if (node.right != null) {
+	                insert(toInsert, node.right);
+	                return;
+	            } else {
+	                toInsert.setFather(node);
+	                node.right = toInsert;
+	            }
+	        }
+	        updateRank(toInsert);
+	      // maybe  balance method is needed check later
+	    }
+
+ /**
+  * after the insertion, we need to apdate rank. the rank of a leaf is 1. then we continue in recursion to the node's father and 
+  * we add to the father's rank 1 until one of 3 conditions occur:
+  * 1- we reached the root. in this case we have no longer what to update
+  * 2-if before the insertion we had a rank difference of 2 , it doesnt matter what is the rank of the other child
+  * in either cases if we add to the father 1 we get a balanced tree
+  * 3- after the insertion we have a rank differences of 0-2. in this case we cant promote the father 
+  * as we get unbalanced tree. so the promotion process stops and now we need to do some rotations.
+  * 
+  */
+   
+   private void updateRank(WAVLNode node) {
+       if (node == null) {
+           return;
+       }
+       else if (node==root) {
+    	   return;
+       }
+       else if (node.father.rank-node.rank==2) {
+    	   node.father.setRank(1);
+    	   return;
+       }
+       else if (node.rank==node.father.rank) {
+    	   if(node.father.rank-node.father.right.rank==2 || node.father.rank-node.father.left.rank==2) {
+    		  // rotation method needed 
+    	   }
+       }else {
+    	   updateRank(node.father);
+       }
+      
+   }
+   
+   
 //TODO Noa - Delete
   /**
    * public int delete(int k)
@@ -340,21 +413,23 @@ public class WAVLTree implements Iterable {
    */
   public class WAVLNode{
 	  
-    private int key;
+    private WAVLNode father;
+	private int key;
     private String value;
     private WAVLNode left;
     private WAVLNode right;
-    private WAVLNode parent;
-    private int subtreeSize;
-    //private int rank;
+    //private WAVLNode parent;
+    //private int subtreeSize;
+    private int rank;
 
     public WAVLNode(int key,String value) {
         this.key = key;
         this.value = value;
         this.right = null;
         this.left = null;
-        this.parent = null;
-        this.subtreeSize = 0;
+        this.father = null;
+        //this.subtreeSize = 0;
+        this.rank=1;
     }
 
     public int getKey() {
@@ -386,7 +461,27 @@ public class WAVLTree implements Iterable {
         return 42; // to be replaced by student code
     }
 
+	public WAVLNode getFather() {
+		return father;
+	}
+// TO DO : think how to update father
+	public void setFather(WAVLNode father) {
+		this.father = father;
+	}
 
+	public int getRank() {
+		return rank;
+	}
+
+	public void setRank(int addrank) {
+		this.rank = rank+addrank;
+	}
+
+
+  }
+  
+  public static void main(String[] args) {
+	  
   }
 
 }
