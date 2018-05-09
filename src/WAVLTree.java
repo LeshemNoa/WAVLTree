@@ -56,17 +56,10 @@ public class WAVLTree implements Iterable {
      *                  in the tree.
      */
   public String search(int k) {
-<<<<<<< HEAD
-	  if (empty()) {
-		  return null;
-	  }
-      return search(k, root);
-=======
       WAVLNode found = findNode(k, root);
       if (found != null)
           return found.value;
       return null;
->>>>>>> 187e787571493db7da5b31dfc75934d035e8f205
   }
 
     /**
@@ -503,10 +496,6 @@ public class WAVLTree implements Iterable {
 	}
 
 
-  }
-  
-  public static void main(String[] args) {
-	  
   }
 
 }
