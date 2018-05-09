@@ -111,16 +111,18 @@ public class WAVLTree implements Iterable {
 	   //nadine: not finished yet. depends on rotation method.
 	   
    }
-   /** Search function with an additional node parameter*/  
-   public void insert(WAVLNode toInsert, WAVLNode node) {
+   /** Search function with an additional node parameter*/ 
+   // insert a node and call promote and rotation method if needed. this method return the 
+   //number of rotation which is taken from the promotion and rotation methods.
+   public int insert(WAVLNode toInsert, WAVLNode node) {
 	        if (root == null) {
 	            root = toInsert;
-	            return;
+	            
 	        }
 	        if (toInsert.key < node.key) {
 	            if (node.left != null) {
 	                insert(toInsert, node.left);
-	                return;
+	               
 	            } else {
 	                toInsert.setParent(node);
 	                node.left = toInsert;
@@ -128,14 +130,15 @@ public class WAVLTree implements Iterable {
 	        } else if (toInsert.key >= node.key) {
 	            if (node.right != null) {
 	                insert(toInsert, node.right);
-	                return;
+	               
 	            } else {
 	                toInsert.setParent(node);
 	                node.right = toInsert;
 	            }
 	        }
-	        promote(toInsert);
-	      // maybe  balance method is needed check later
+	        int num_ofrotations=promote(toInsert);
+	        return num_ofrotations;
+	      
 	    }
 
  /**
@@ -149,28 +152,109 @@ public class WAVLTree implements Iterable {
   * 
   */
    
-   private void promote(WAVLNode node) {
+   private int promote(WAVLNode node) {
        if (node == null) {
-           return;
+           return 0;
        }
        else if (node==root) {
-    	   return;
+    	   return 0;
        }
        else if (node.parent.rank-node.rank==2) {
     	   node.parent.setRank(1);
-    	   return;
+    	   return 0;
        }
        else if (node.rank==node.parent.rank) {
-    	   if(node.parent.rank-node.parent.right.rank==2 || node.parent.rank-node.parent.left.rank==2) {
-    		  // rotation method needed 
+    	   if(node.parent.getBalance()==2) {
+    		  int num_of_rotations= rotate(node.parent);
+    		   return num_of_rotations;
     	   }
        }else {
     	   promote(node.parent);
        }
-      
+      return 0;
    }
    
-   
+  //rotation method. should check if another rotation is needed.
+   private int rotate(WAVLNode node) {
+	   int balance = update_Balance(node);
+	   if(balance==-2) {
+			if (node.left.left.rank>=node.left.right.rank) {
+				 rotateRight(node);
+				 return 1;
+			} else {
+				//doubleRotateLeftRight(node);
+				return 2;
+			}
+	   } else if(balance==2) {
+			if(node.right.right.rank>=node.right.left.rank) {
+				rotateLeft(node);
+				return 1;
+			} else {
+				//doubleRotateRightLeft(node);
+				return 2;
+			}}else {
+				return 0;
+			}
+		}
+	   
+// check the rank difference between left and right node.
+	private int update_Balance(WAVLNode node) {
+		int balance = node.right.rank-node.left.rank;
+		node.setBalance(balance);
+		return 	balance;	
+		}
+// new- rotate left
+	public void rotateLeft(WAVLNode node) {
+		
+		WAVLNode newtop_node = node.right;
+		newtop_node.parent = node.parent;
+		
+		node.right = newtop_node.left;
+		
+		if(node.right!=null) {
+			node.right.parent=node;
+		}
+		
+		newtop_node.left = node;
+		node.parent = newtop_node;
+		
+		if(newtop_node.parent!=null) {
+			if(newtop_node.parent.right==node) {
+				newtop_node.parent.right = newtop_node;
+			} else if(newtop_node.parent.left==node) {
+				newtop_node.parent.left = newtop_node;
+			}
+		}
+		node.setRank(-1);
+	
+	}
+// new- rotate right
+public void rotateRight(WAVLNode node) {
+		
+		WAVLNode newtop_node = node.left;
+		newtop_node.parent = node.parent;
+		
+		node.left = newtop_node.right;
+		
+		if(node.left!=null) {
+			node.left.parent=node;
+		}
+		
+		newtop_node.right = node;
+		node.parent = newtop_node;
+		
+		
+		if(newtop_node.parent!=null) {
+			if(newtop_node.parent.right==node) {
+				newtop_node.parent.right = newtop_node;
+			} else if(newtop_node.parent.left==node) {
+				newtop_node.parent.left = newtop_node;
+			}
+		}
+		node.setRank(-1);
+	
+	}
+	 
 //TODO Noa - Delete
 
   /**
@@ -457,7 +541,7 @@ public class WAVLTree implements Iterable {
    */
    // size is added because there was a function above to complete. if we can
    // delete things maybe there is no use for size.
-   // rank is added, parent
+   // rank is added, parent,balance
   public class WAVLNode{
 	  
     private WAVLNode parent;
@@ -468,6 +552,7 @@ public class WAVLTree implements Iterable {
     private int subtreeSize;
     private int rank;
     private int size;
+    private int balance;
 
     public WAVLNode(int key,String value) {
         this.key = key;
@@ -478,6 +563,7 @@ public class WAVLTree implements Iterable {
         this.subtreeSize = 0;
         this.rank=1;
         this.size=0;
+        this.balance=0;
     }
 
     public int getKey() {
@@ -533,7 +619,14 @@ public class WAVLTree implements Iterable {
 	public void setSize(int size) {
 		this.size = size;
 	}
-
+//new
+	public int getBalance() {
+		return balance;
+	}
+//new
+	public void setBalance(int balance) {
+		this.balance = balance;
+	}
 
   }
   
