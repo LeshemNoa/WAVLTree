@@ -1,5 +1,4 @@
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
 
@@ -30,7 +29,7 @@ public class WAVLTree implements Iterable {
     }
 
     /**
-     * Returns node if the tree does not have any nodes in it, false otherwise.
+     * Returns true if the tree does not have any nodes in it, false otherwise.<br>
      *
      * The function runs in O(1) time as it only checks whether a pointer is null or not.
      *
@@ -43,11 +42,11 @@ public class WAVLTree implements Iterable {
 
     /**
      * Searches the tree for key k and returns its value, or null if k isn't in
-     * the tree.
+     * the tree.<br>
      *
-     * Used as a wrapper function that passes k and the tree root to an overloaded
-     * search function to search each subtree along the path from the root
-     * to the required key.
+     * Used as a wrapper function that passes k and the tree root to findNode,
+     * another, more general search function, findNode, to search each subtree along the path
+     * from the root to the required key.<br>
      *
      * This method runs in O(h) = O(logn) time as it traverses a simple path
      * from the root to the deepest leaf in the worst case.
@@ -57,31 +56,40 @@ public class WAVLTree implements Iterable {
      *                  in the tree.
      */
   public String search(int k) {
+<<<<<<< HEAD
 	  if (empty()) {
 		  return null;
 	  }
       return search(k, root);
+=======
+      WAVLNode found = findNode(k, root);
+      if (found != null)
+          return found.value;
+      return null;
+>>>>>>> 187e787571493db7da5b31dfc75934d035e8f205
   }
 
     /**
-     * Search function with an additional node parameter.
+     * Search function with an additional node parameter. Returns a node.
      *
      * This method utilizes the BST property of the WAVL tree to move recursively
      * from a root node to one of its subtrees, according to k and the key held at
      * the node.
      *
+     * This method runs in O(h) = O(logn) time as it traverses a simple path
+     * from the root to the deepest leaf in the worst case.
+     *
      * @param k         the key being searched
      * @param node      node at the root of the subtree in which we search for k
-     * @return          value associated with key k, or null if k is not
-     *                  in the tree.
+     * @return          node with key k, or null if k is not in the tree.
      */
-  private String search(int k, WAVLNode node) {
+  private WAVLNode findNode(int k, WAVLNode node) {
       if (k == node.key)
-          return node.value;
+          return node;
       else if (k > node.key && node.right != null)
-          return search(k, node.right);
+          return findNode(k, node.right);
       else if (k < node.key && node.left != null)
-          return search(k, node.left);
+          return findNode(k, node.left);
       return null;
   }
 
@@ -165,6 +173,7 @@ public class WAVLTree implements Iterable {
    
    
 //TODO Noa - Delete
+
   /**
    * public int delete(int k)
    *
@@ -179,13 +188,14 @@ public class WAVLTree implements Iterable {
    }
 
 
+
     /**
      * Returns the value associated with the minimal key in the tree, or null if the
-     * tree is empty.
+     * tree is empty.<br>
      *
-     * Used as a wrapper function that passes k and the tree root to another, more
-     * general function, which returns the node with the minimal key of the subtree
-     * whose root is the node passed to the function.
+     * Used as a wrapper function that passes the tree root to another, more
+     * general function, nodeWithMinKey, which returns the node with the minimal key
+     * of the subtree whose root is the node passed to the function.<br>
      *
      * This function runs in O(h) = O(logn) time as it traverses a path from the root
      * to the deepest leaf in the worst case.
@@ -219,15 +229,13 @@ public class WAVLTree implements Iterable {
        return curr;
    }
 
-   //TODO Check this out and see if we need an overloaded option max() too
     /**
      * Returns the value associated with the maximal key in the tree, or null if the
-     * tree is empty.
+     * tree is empty.<br>
      *
-     * As a result of the BST property of the WAVL tree, the greatest key in the
-     * tree will always be at the rightmost node. The function traverses the rightmost
-     * path in the tree until it is exhausted, i.e. when there is no longer any node
-     * to the right, then returns the node at the end of it.
+     * Used as a wrapper function that passes the tree root to another, more
+     * general function, nodeWithMaxKey, which returns the node with the minimal key of
+     * the subtree whose root is the node passed to the function.<br>
      *
      * This function runs in O(h) = O(logn) time as it traverses a path from the root
      * to the deepest leaf in the worst case.
@@ -235,14 +243,29 @@ public class WAVLTree implements Iterable {
      * @return      the value associated with the maximal key in the tree
      */
    public String max() {
-       if (this.empty())
+       return nodeWithMaxKey(root).value;
+   }
+
+    /**
+     * Returns the node with the maximal key in the tree, or null if the
+     * tree is empty.<br>
+     *
+     * As a result of the BST property of the WAVL tree, the greatest key in the
+     * tree will always be at the rightmost node. The function traverses the rightmost
+     * path in the tree until it is exhausted, i.e. when there is no longer any node
+     * to the right, then returns the node at the end of it.<br>
+     *
+     * @return      the value associated with the maximal key in the tree
+     */
+   private WAVLNode nodeWithMaxKey(WAVLNode node) {
+       if (node == null)
            return null;
 
-       WAVLNode curr = root;
+       WAVLNode curr = node;
        while (curr.right != null) {
            curr = curr.right;
        }
-       return curr.value;
+       return curr;
    }
 
     @Override
@@ -252,7 +275,7 @@ public class WAVLTree implements Iterable {
 
     /**
      * The WAVL tree iterator is a finite iterator which will return, upon each call to next(),
-     * the next node to appear in an in-order traversal of the tree.
+     * the next node to appear in an in-order traversal of the tree.<br>
      *
      * The iterator maintains two variables: a node curr, the node most recently returned by next(),
      * and a counter, which counts the number of calls to next() and allows to determine whether
@@ -261,7 +284,9 @@ public class WAVLTree implements Iterable {
      */
 
     private class WAVLIterator implements Iterator {
+        /** Counts calls to next */
         private int counter = 0;
+        /** Last node returned by the iterator */
         private WAVLNode curr;
 
         private WAVLIterator() {
@@ -279,9 +304,9 @@ public class WAVLTree implements Iterable {
         }
 
         /**
-         * Returns the next node in an in-order traversal of the tree.
+         * Returns the next node in an in-order traversal of the tree.<br>
          *
-         * This function implements the Successor algorithm of the BST.
+         * This function implements the Successor algorithm of the BST.<br>
          *
          * The function runs in O(h) = O(logn) time, as it traverses a path from/to the
          * root to/from the deepest leaf in the worst case.
@@ -318,11 +343,11 @@ public class WAVLTree implements Iterable {
     }
 
     /**
-     * Returns a sorted array of the tree's keys, or an empty array if the tree is empty.
+     * Returns a sorted array of the tree's keys, or an empty array if the tree is empty.<br>
      *
      * The function runs in O(nlogn) in time as in the worst case, as it performs n cosecutive
      * Successor calls with worst case runtime complexity of O(logn). However, in HW2 we proved
-     * that a tighter complexity bound would be O(n+h) = O(n+logn) = O(n).
+     * that a tighter complexity bound would be O(n+h) = O(n+logn) = O(n).<br>
      *
      * @return      array of the tree's keys in ascending order
      */
@@ -343,9 +368,9 @@ public class WAVLTree implements Iterable {
 
     /**
      * Returns a string array containing the values of the tree's nodes, sorted in ascending
-     * order of their keys, or an empty array if the tree is empty.
+     * order of their keys, or an empty array if the tree is empty.<br>
      *
-     * The i-th cell in the array will contain the value associated with the i-th key.
+     * The i-th cell in the array will contain the value associated with the i-th key.<br>
      *
      * The function runs in O(nlogn) in time as in the worst case, as it performs n cosecutive
      * Successor calls with worst case runtime complexity of O(logn). However, in HW2 we proved
