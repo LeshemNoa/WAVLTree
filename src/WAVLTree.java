@@ -101,9 +101,9 @@ public class WAVLTree implements Iterable {
    public int insert(int k, String i) {
 	   
 	   WAVLNode newnode= new WAVLNode(k,i);
-	   insert(newnode,root);
-	   return 0;
-	   //nadine: not finished yet. depends on rotation method.
+	   int x=insert(newnode,root);
+	   return x;
+	   
 	   
    }
    /** Search function with an additional node parameter*/ 
