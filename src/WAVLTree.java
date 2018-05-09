@@ -14,7 +14,7 @@ import java.util.List;
 
 public class WAVLTree implements Iterable {
     private WAVLNode root;
-    private int treeSize;
+    private int treeSize; // not necessary??
 
     //TODO constructor? overloaded constructor?
     public WAVLTree(int key, String value) {
@@ -115,7 +115,7 @@ public class WAVLTree implements Iterable {
 	                insert(toInsert, node.left);
 	                return;
 	            } else {
-	                toInsert.setFather(node);
+	                toInsert.setParent(node);
 	                node.left = toInsert;
 	            }
 	        } else if (toInsert.key >= node.key) {
@@ -123,7 +123,7 @@ public class WAVLTree implements Iterable {
 	                insert(toInsert, node.right);
 	                return;
 	            } else {
-	                toInsert.setFather(node);
+	                toInsert.setParent(node);
 	                node.right = toInsert;
 	            }
 	        }
@@ -132,7 +132,7 @@ public class WAVLTree implements Iterable {
 	    }
 
  /**
-  * after the insertion, we need to apdate rank. the rank of a leaf is 1. then we continue in recursion to the node's father and 
+  * after the insertion, we need to update rank. the rank of a leaf is 1. then we continue in recursion to the node's father and 
   * we add to the father's rank 1 until one of 3 conditions occur:
   * 1- we reached the root. in this case we have no longer what to update
   * 2-if before the insertion we had a rank difference of 2 , it doesnt matter what is the rank of the other child
@@ -149,16 +149,16 @@ public class WAVLTree implements Iterable {
        else if (node==root) {
     	   return;
        }
-       else if (node.father.rank-node.rank==2) {
-    	   node.father.setRank(1);
+       else if (node.parent.rank-node.rank==2) {
+    	   node.parent.setRank(1);
     	   return;
        }
-       else if (node.rank==node.father.rank) {
-    	   if(node.father.rank-node.father.right.rank==2 || node.father.rank-node.father.left.rank==2) {
+       else if (node.rank==node.parent.rank) {
+    	   if(node.parent.rank-node.parent.right.rank==2 || node.parent.rank-node.parent.left.rank==2) {
     		  // rotation method needed 
     	   }
        }else {
-    	   updateRank(node.father);
+    	   updateRank(node.parent);
        }
       
    }
@@ -413,13 +413,13 @@ public class WAVLTree implements Iterable {
    */
   public class WAVLNode{
 	  
-    private WAVLNode father;
+    private WAVLNode parent;
 	private int key;
     private String value;
     private WAVLNode left;
     private WAVLNode right;
     //private WAVLNode parent;
-    //private int subtreeSize;
+    private int subtreeSize;
     private int rank;
 
     public WAVLNode(int key,String value) {
@@ -427,8 +427,8 @@ public class WAVLTree implements Iterable {
         this.value = value;
         this.right = null;
         this.left = null;
-        this.father = null;
-        //this.subtreeSize = 0;
+        this.parent = null;
+        this.subtreeSize = 0;
         this.rank=1;
     }
 
@@ -461,12 +461,12 @@ public class WAVLTree implements Iterable {
         return 42; // to be replaced by student code
     }
 
-	public WAVLNode getFather() {
-		return father;
+	public WAVLNode getParent() {
+		return parent;
 	}
-// TO DO : think how to update father
-	public void setFather(WAVLNode father) {
-		this.father = father;
+
+	public void setParent(WAVLNode parent) {
+		this.parent = parent;
 	}
 
 	public int getRank() {
