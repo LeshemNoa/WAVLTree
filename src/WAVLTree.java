@@ -69,7 +69,7 @@ public class WAVLTree implements Iterable {
      * from the root to the deepest leaf in the worst case.
      *
      * @param k         the key being searched
-     * @param node      node at the root of the subtree in which we search for k
+     * @param node      node at the root of the subtree in which k is searched
      * @return          node with key k, or null if k is not in the tree.
      */
   private WAVLNode findNode(int k, WAVLNode node) {
@@ -82,7 +82,6 @@ public class WAVLTree implements Iterable {
       return null;
   }
 
-//TODO Nadine - Insert
   /**
    * public int insert(int k, String i)
    *
@@ -92,8 +91,90 @@ public class WAVLTree implements Iterable {
    * returns -1 if an item with key k already exists in the tree.
    */
    public int insert(int k, String i) {
-          return 42;    // to be replaced by student code
+
+       /* Step 1: Check if key k is already in the tree, or where to insert it if it
+       isn't, using the findInsertionPlace method. */
+       WAVLNode parentNode = findInsertionPlace(k, root);
+       if (parentNode.key == k)
+           return -1;
+
+       /* Step 2: Place new node in appropriate place. Characterize the parent vertice
+       * by the rank differences on its edges with its children, and determine the course
+       * of action accordingly. */
+
+
+
+
    }
+
+    /**
+     * Finds the appropriate parent node for a new node with key k to be inserted,
+     * or an existing node with key k. <br>
+     *
+     * This method utilizes the BST property of the WAVL tree to move recursively
+     * from a root node to one of its subtrees, according to k and the key held at
+     * the node.<br>
+     *
+     * It searches the tree to find the unary node or the leaf which will be the
+     * parent of the new node with key k. If the node returned has key k, then the
+     * new node should ne be reinserted. <br>
+     *
+     * This function runs in O(h) = O(logn) time as it traverses a path from the root
+     * to the deepest leaf in the worst case.
+     *
+     * @param k         key of the new node inserted
+     * @param node      node at the root of the subtree in which the insertion place
+     *                  is searched
+     * @return          the node to which the node inserted is assigned to as
+     *                  its left or right child
+     *
+     */
+   private WAVLNode findInsertionPlace(int k, WAVLNode node) {
+       if (k == node.key)
+           return node;
+       else if (k > node.key) {
+           if (node.right == null)
+           /* Node is free to accept new node with key k as its right child */
+               return node;
+           else
+           /* Node has a right subtree, hence new node with key k will be placed there */
+               return findInsertionPlace(k, node.right);
+       }
+       else {
+           if (node.left == null)
+           /* Node is free to accept new node with key k as its left child */
+               return node;
+           else
+           /* Node has a left subtree, hence new node with key k will be placed there */
+                return findInsertionPlace(k,node.left);
+       }
+   }
+
+    /**
+     * Characterizes the type of node by the rank differences with its children.<br>
+     *
+     * If the node is a unary node, the
+     * @param node      the node of which the rank differences are returned
+     * @return          a size 2 array: array[0] - rank difference between the node
+     *                  and its left child; array[1] - rank difference between the node
+     *                  and its right child
+     */
+    private int[] verticeType(WAVLNode node) {
+       int[] rankDiffs = new int[2];
+
+       if (node.left != null)
+           rankDiffs[0] = node.rank - node.left.rank;
+       else
+           rankDiffs[0] = node.rank - (-1);
+
+       if (node.right != null)
+           rankDiffs[1] = node.rank - node.right.rank;
+        else
+           rankDiffs[1] = node.rank - (-1);
+
+       return rankDiffs;
+    }
+
 
 //TODO Noa - Delete
 
@@ -369,13 +450,25 @@ public class WAVLTree implements Iterable {
     private int subtreeSize;
     private int rank;
 
-    public WAVLNode(int key,String value) {
+    public WAVLNode(int key, String value) {
         this.key = key;
         this.value = value;
         this.right = null;
         this.left = null;
         this.parent = null;
         this.subtreeSize = 0;
+    }
+
+        /**
+         * Overloaded constructor which also takes a parent node - for insertion
+         * @param key
+         * @param value
+         * @param parent
+         */
+    private WAVLNode(int key, String value, WAVLNode parent) {
+        this(key, value);
+        this.rank = 0;
+        this.parent = parent;
     }
 
     public int getKey() {
