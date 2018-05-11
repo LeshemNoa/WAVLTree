@@ -100,41 +100,45 @@ public class WAVLTree implements Iterable {
 
    public int insert(int k, String i) {
 	   
-	   WAVLNode newnode= new WAVLNode(k,i);
-	   int x=insert(newnode,root);
+	   WAVLNode toInsert = new WAVLNode(k,i);
+	   int x = insert(toInsert, root); // TODO give meaningful name to the variable
 	   return x;
-	   
+
 	   
    }
-   /** Search function with an additional node parameter*/ 
+   /** Insert function with an additional node parameter*/
    // insert a node and call promote and rotation method if needed. this method return the 
    //number of rotation which is taken from the promotion and rotation methods.
-   public int insert(WAVLNode toInsert, WAVLNode node) {
-	        if (root == null) {
-	            root = toInsert;
-	            
-	        }
-	        if (toInsert.key < node.key) {
-	            if (node.left != null) {
-	                insert(toInsert, node.left);
-	               
-	            } else {
-	                toInsert.setParent(node);
-	                node.left = toInsert;
-	            }
-	        } else if (toInsert.key >= node.key) {
-	            if (node.right != null) {
-	                insert(toInsert, node.right);
-	               
-	            } else {
-	                toInsert.setParent(node);
-	                node.right = toInsert;
-	            }
-	        }
-	        int num_ofrotations=promote(toInsert);
-	        return num_ofrotations;
-	      
-	    }
+   private int insert(WAVLNode toInsert, WAVLNode node) { // Noa: made private
+
+        if (root == null) {
+            root = toInsert;
+        }
+
+        if (toInsert.key < node.key) {
+            if (node.left != null) {
+                insert(toInsert, node.left);
+
+            } else {
+                toInsert.setParent(node);
+                node.left = toInsert;
+            }
+        }
+
+        else if (toInsert.key >= node.key) {
+            if (node.right != null) {
+                insert(toInsert, node.right);
+
+            } else {
+                toInsert.setParent(node);
+                node.right = toInsert;
+            }
+        }
+
+        int numOfRotations = promote(toInsert);
+        return numOfRotations;
+
+    }
 
  /**
   * after the insertion, we need to update rank. the rank of a leaf is 1. then we continue in recursion to the node's father and 
@@ -151,28 +155,37 @@ public class WAVLTree implements Iterable {
        if (node == null) {
            return 0;
        }
-       else if (node==root) {
+
+       else if (node == root) { // Halting condition - reached root or tree was empty
     	   return 0;
        }
-       else if (node.parent.rank-node.rank==2) {
-    	   node.parent.setRank(1);
-    	   return 0;
+
+       else if (node.parent.rank - node.rank == 2) { // rank difference 2 between child and parent
+           // this is supposed to be the non problematic case where we replace an external node with
+           // new node, update its rank to zero as it's a leaf and finish
+    	   node.rank = 0;
+    	   return 1;
        }
-       else if (node.rank==node.parent.rank) {
-    	   if(node.parent.getBalance()==2) {
-    		  int num_of_rotations= rotate(node.parent);
+
+       else if (node.rank == node.parent.rank) { // rank difference 0 between child and parent
+
+           if(node.parent.getBalance() == 2) { // parent node is (0,2) - rotation case
+    		  int num_of_rotations = rotate(node.parent);
     		   return num_of_rotations;
     	   }
-       }else {
+
+       } else {
     	   promote(node.parent);
        }
+
       return 0;
    }
    
   //rotation method. should check if another rotation is needed.
    private int rotate(WAVLNode node) {
 	   int balance = update_Balance(node);
-	   if(balance==-2) {
+
+	   if (balance == -2) {
 			if (node.left.left.rank>=node.left.right.rank) {
 				 rotateRight(node);
 				 return 1;
@@ -180,14 +193,16 @@ public class WAVLTree implements Iterable {
 				//doubleRotateLeftRight(node);
 				return 2;
 			}
-	   } else if(balance==2) {
+
+	   } else if (balance == 2) {
 			if(node.right.right.rank>=node.right.left.rank) {
 				rotateLeft(node);
 				return 1;
 			} else {
 				//doubleRotateRightLeft(node);
 				return 2;
-			}}else {
+			}}
+			else {
 				return 0;
 			}
 		}
@@ -481,8 +496,7 @@ public void rotateRight(WAVLNode node) {
 	   return size_Node(root);
    }
  //returns how many nodes are in a specific node.  
-   public int size_Node(WAVLNode node) {
-	   
+   private int size_Node(WAVLNode node) {
 	        if (empty()) {
 	            return 0;
 	        }
@@ -536,7 +550,7 @@ public void rotateRight(WAVLNode node) {
    */
    // size is added because there was a function above to complete. if we can
    // delete things maybe there is no use for size.
-   // rank is added, parent,balance
+   // rank is added, parent, balance
   public class WAVLNode{
 	  
     private WAVLNode parent;
@@ -556,9 +570,9 @@ public void rotateRight(WAVLNode node) {
         this.left = null;
         this.parent = null;
         this.subtreeSize = 0;
-        this.rank=1;
-        this.size=0;
-        this.balance=0;
+        this.rank = 0;
+        this.size = 0;
+        this.balance = 0;
     }
 
     public int getKey() {
@@ -579,9 +593,7 @@ public void rotateRight(WAVLNode node) {
     }
     public boolean isInnerNode()
     {
-        if (left != null || right != null)
-            return true;
-        return false;
+        return left != null || right != null;
     }
 
 //TODO Required complexity: O(1), let's think about it later
@@ -594,32 +606,32 @@ public void rotateRight(WAVLNode node) {
 	public WAVLNode getParent() {
 		return parent;
 	}
-//new
-	public void setParent(WAVLNode parent) {
+//new - made private
+	private void setParent(WAVLNode parent) {
 		this.parent = parent;
 	}
-//new
-	public int getRank() {
+//new - made private
+	private int getRank() {
 		return rank;
 	}
-//new
-	public void setRank(int addrank) {
-		this.rank = rank+addrank;
+//new - made private
+	private void setRank(int addrank) {
+		this.rank = rank + addrank;
 	}
-//new
-	public int getSize() {
+//new - made private
+	private int getSize() {
 		return size;
 	}
-//new
-	public void setSize(int size) {
+//new - made private
+	private void setSize(int size) {
 		this.size = size;
 	}
-//new
-	public int getBalance() {
+//new - made private
+	private int getBalance() {
 		return balance;
 	}
-//new
-	public void setBalance(int balance) {
+//new - made private
+	private void setBalance(int balance) {
 		this.balance = balance;
 	}
 
