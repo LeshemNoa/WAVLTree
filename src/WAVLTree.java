@@ -98,13 +98,20 @@ public class WAVLTree implements Iterable {
        if (parentNode.key == k)
            return -1;
 
-       /* Step 2: Place new node in appropriate place. Characterize the parent vertice
-       * by the rank differences on its edges with its children, and determine the course
-       * of action accordingly. */
+       /* Step 2: Place new node in appropriate place.*/
+       WAVLNode newNode = new WAVLNode(k, i, parentNode);
+       if (k > parentNode.key)
+           parentNode.right = newNode;
+       else
+           parentNode.left = newNode;
 
+       /*Step 3: Characterize the parent vertice by the rank differences on its edges with
+        its children, and determine the course of action accordingly. */
+       int[] parentNodeType = verticeType(parentNode);
+       int[] newNodeType = verticeType(newNode);
 
-
-
+       return 0;
+       //TODO: UPDATE SUBTREE SIZES UP THE PATH TO THE ROOT
    }
 
     /**
@@ -153,7 +160,13 @@ public class WAVLTree implements Iterable {
     /**
      * Characterizes the type of node by the rank differences with its children.<br>
      *
-     * If the node is a unary node, the
+     * If the node is a unary node, then the missing child is referred to as an external
+     * node with rank -1. Returns a size 2 array containing the rank differences, left to right.
+     * This allows to determine the course of action during the rebalancing process.<br>
+     *
+     * This function runs in O(1) time as it only requires access to pointers, and the creation
+     * of a fixed sized array.
+     *
      * @param node      the node of which the rank differences are returned
      * @return          a size 2 array: array[0] - rank difference between the node
      *                  and its left child; array[1] - rank difference between the node
@@ -175,6 +188,266 @@ public class WAVLTree implements Iterable {
        return rankDiffs;
     }
 
+    /**
+     * Receives a size 2 array of rank differences produced by the verticeType function,
+     * and checks if the vertice type is valid according to the WAVL rules. <br>
+     *
+     * Returns a boolean value - true if the vertice type is one of the following: {(1,1),
+     * (1,2), (2,1), (2,2)}, and false otherwise, implying rebalancing is required. <br>
+     *
+     * This function runs in O(1) time as it iterates on a fixed sized array.
+     *
+     * @param vType     a size 2 array of rank differences between a certain node in the tree
+     *                  and its two children
+     * @return          true if vertice type is in accordance with the WAVL invariants, false
+     *                  otherwise
+     */
+    private boolean isValidType(int[] vType) {
+        for (int rankDiff : vType) {
+            if (rankDiff != 1) {
+                if (rankDiff != 2)
+                    return false;
+            }
+        }
+        return true;
+    }
+
+    /**
+     * Rebalances WAVL tree after insertion. <br>
+     *
+     * Receives a tree node where a violation of the WAVL tree invariants has occurred,
+     * and corrects it by performing a series of rebalancing actions up the path from the
+     * given node to the root of the tree.<br>
+     *
+     * @return          number of promotions, rotations and double rotations performed
+     *                  during the rebalancing process
+     */
+    private int rebalance(WAVLNode node) {
+        int counter = 0;
+        WAVLNode curr = node;
+        int[] currVType = verticeType(node);
+
+        /* Rebalancing cases after insertion */
+        while (! isValidType(currVType)) {
+            if (currVType[0] == 0) { // Rolling up from the left
+                switch (currVType[1]) {
+                    case 1: // (0,1) node - promotion case - NON TERMINAL
+                        // promote
+                        counter++;
+                        curr = curr.parent;
+                        currVType = verticeType(curr);
+                        break;
+                    case 2: // (0,2) node - rotation cases - TERMINAL
+                        WAVLNode currChild = curr.left;
+                        int[] childVType = verticeType(currChild);
+
+                        if (childVType[0] == 1 && childVType[1] == 2) {
+                            // single rotation to the right
+                            counter++;
+                            return counter;
+                        }
+                        else if (childVType[0] == 2 && childVType [1] == 1) {
+                            /* else if is for debugging purposes. I want to check later if
+                            * any other conditions can occur - they shouldn't according to
+                            * the algorithm. If everything's ok I'll change it to else*/
+                            // double rotation to the left
+                            counter++;
+                            return counter;
+                        }
+                }
+            }
+
+            else if (currVType[1] == 0) { //Rolling up from the right
+                switch (currVType[0]) {
+                    case 1: // (1,0) node - promotion case - NON TERMINAL
+                        // promote
+                        counter++;
+                        curr = curr.parent;
+                        currVType = verticeType(curr);
+                        break;
+                    case 2: // (2,0) node - rotation cases - TERMINAL
+                        WAVLNode currChild = curr.right;
+                        int[] childVType = verticeType(currChild);
+
+                        if (childVType[0] == 2 && childVType[1] == 1) {
+                            // single rotation to the left
+                            counter++;
+                            return counter;
+                        }
+
+                        else if (childVType[0] == 1 && childVType[1] == 2) {
+                            // double rotation to the left
+                            counter++;
+                            return counter;
+                        }
+                    }
+                }
+        }
+        return counter;
+    }
+
+    /**
+     * Performs a single rotation to the right of the subtree of which the node
+     * provided is the root. <br>
+     *
+     * Illustration below is in accordance with variable names:
+     *
+     *        p                    p
+     *        |                    |
+     *        z                    x
+     *      /  \  Rotate right   /  \
+     *     x   y                a   z
+     *    / \                      / \
+     *   a  b                     b  y
+     *
+     * During this process, node z is demoted. All other nodes retain their ranks.
+     *
+     * @param z       the node at the root of the subtree rotated
+     */
+    private void rightRotate(WAVLNode z) {
+        WAVLNode p = z.parent;
+        WAVLNode x = z.left;
+        WAVLNode b = x.right;
+
+        if (z.key < p.key) { // rotating p's left subtree
+            p.setLeftChild(x);
+        }
+        else { // rotating p's right subtree
+            p.setRightChild(x);
+        }
+
+        x.setRightChild(z);
+        z.setLeftChild(b);
+
+        z.rank--;
+    }
+
+    /**
+     * Performs a single rotation to the left of the subtree of which the node
+     * provided is the root. <br>
+     *
+     * Illustration below is in accordance with variable names:
+     *
+     *     p                     p
+     *     |                     |
+     *     z                     y
+     *   /  \   Rotate left    /  \
+     *  x   y                 z   b
+     *     / \               / \
+     *    a  b              x  a
+     *
+     * During this process, node z is demoted. All other nodes retain their ranks.
+     *
+     * @param z     the node at the root of the subtree rotated
+     */
+    private void leftRotate(WAVLNode z) {
+        WAVLNode p = z.parent;
+        WAVLNode y = z.right;
+        WAVLNode a = y.left;
+
+        if (z.key < p.key) { // rotating p's left subtree
+            p.setLeftChild(y);
+        }
+        else { // rotating p's right subtree
+            p.setRightChild(y);
+        }
+
+        y.setLeftChild(z);
+        z.setRightChild(a);
+
+        z.rank--;
+    }
+
+    /**
+     * Performs a double rotation to the right of the subtree of which the node
+     * provided is the root. <br>
+     *
+     * Illustration below is in accordance with variable names:
+     *
+     *      p                            p
+     *      |                            |
+     *      z                            b
+     *     / \                         /   \
+     *    x  y  Double rotate right   x    z
+     *   / \                         / \  / \
+     *  a  b                        a  c d  y
+     *    / \
+     *   c  d
+     *
+     * During this process, nodes x and z are demoted, and node b is promoted.
+     * All other nodes retain their ranks.
+     *
+     * @param z     the node at the root of the subtree rotated
+     */
+
+    private void doubleRotateRight(WAVLNode z) {
+        WAVLNode p = z.parent;
+        WAVLNode x = z.left;
+        WAVLNode b = x.right;
+        WAVLNode c = b.right;
+        WAVLNode d = b.left;
+
+        if (z.key < p.key) { // rotating p's left subtree
+            p.setLeftChild(b);
+        }
+        else { // rotating p's right subtree
+            p.setRightChild(b);
+        }
+
+        b.setLeftChild(x);
+        b.setRightChild(z);
+        x.setRightChild(c);
+        z.setLeftChild(d);
+
+        x.rank--;
+        z.rank--;
+        b.rank++;
+    }
+
+    /**
+     * Performs a double rotation to the right of the subtree of which the node
+     * provided is the root. <br>
+     *
+     * Illustration below is in accordance with variable names:
+     *
+     *    p                            p
+     *    |                            |
+     *    z                            a
+     *   / \                         /   \
+     *  x  y   Double rotate left   z    y
+     *    / \                      / \  / \
+     *   a  b                     x  c d  b
+     *  / \
+     * c  d
+     *
+     * During this process, nodes y and z are demoted, and node a is promoted.
+     * All other nodes retain their ranks.
+     *
+     * @param z     the node at the root of the subtree rotated
+     */
+    private void doubleRotateLeft(WAVLNode z) {
+        WAVLNode p = z.parent;
+        WAVLNode y = z.right;
+        WAVLNode a = y.left;
+        WAVLNode c = a.left;
+        WAVLNode d = a.right;
+
+        if (z.key < p.key) { // rotating p's left subtree
+            p.setLeftChild(a);
+        }
+        else { // rotating p's right subtree
+            p.setRightChild(a);
+        }
+
+        a.setLeftChild(z);
+        a.setRightChild(y);
+        z.setRightChild(c);
+        y.setLeftChild(d);
+
+        y.rank--;
+        z.rank--;
+        a.rank++;
+    }
 
 //TODO Noa - Delete
 
@@ -460,10 +733,12 @@ public class WAVLTree implements Iterable {
     }
 
         /**
-         * Overloaded constructor which also takes a parent node - for insertion
-         * @param key
-         * @param value
-         * @param parent
+         * Overloaded constructor for the WAVLNode class, with an additional parent node
+         * parameter.<br>
+         *
+         * @param key       the new node's key
+         * @param value     the new node's info
+         * @param parent    the new node's parent
          */
     private WAVLNode(int key, String value, WAVLNode parent) {
         this(key, value);
@@ -498,6 +773,31 @@ public class WAVLTree implements Iterable {
     public int getSubtreeSize()
     {
         return 42; // to be replaced by student code
+    }
+
+        /**
+         * Sets the right child of a node to be the node provided. <br>
+         *
+         * Updates the parent field for the child node as well, to maintain the doubly
+         * linked structure.
+         *
+         * @param rChild        node to be set as the right child
+         */
+    private void setRightChild(WAVLNode rChild) {
+        this.right = rChild;
+        rChild.parent = this;
+    }
+        /**
+         * Sets the left child of a node to be the node provided. <br>
+         *
+         * Updates the parent field for the child node as well, to maintain the doubly
+         * linked structure.
+         *
+         * @param lChild        node to be set as the right child
+         */
+    private void setLeftChild(WAVLNode lChild) {
+        this.left = lChild;
+        lChild.parent = this;
     }
 
 
