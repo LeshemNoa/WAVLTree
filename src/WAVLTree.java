@@ -105,13 +105,17 @@ public class WAVLTree implements Iterable {
        else
            parentNode.left = newNode;
 
-       /*Step 3: Characterize the parent vertice by the rank differences on its edges with
-        its children, and determine the course of action accordingly. */
-       int[] parentNodeType = verticeType(parentNode);
-       int[] newNodeType = verticeType(newNode);
+       /* Step 3: Rebalance */
+       int numOfOperations = insertionRebalnce(parentNode);
 
-       return 0;
-       //TODO: UPDATE SUBTREE SIZES UP THE PATH TO THE ROOT
+       /* Step 4: Update subtree sizes up the insertion path */
+        WAVLNode curr = parentNode;
+        while (curr != null) {
+            curr.subtreeSize++;
+            curr = curr.parent;
+        }
+
+       return numOfOperations;
    }
 
     /**
@@ -222,66 +226,45 @@ public class WAVLTree implements Iterable {
      * @return          number of promotions, rotations and double rotations performed
      *                  during the rebalancing process
      */
-    private int rebalance(WAVLNode node) {
+    private int insertionRebalnce(WAVLNode node) {
         int counter = 0;
         WAVLNode curr = node;
         int[] currVType = verticeType(node);
 
         /* Rebalancing cases after insertion */
-        while (! isValidType(currVType)) {
+        while (!isValidType(currVType)) {
+            counter++;
+            if (currVType[0] + currVType[1] == 1) { // (0,1), (1,0) Promotion cases
+                curr.rank++;
+                curr = curr.parent;
+                currVType = verticeType(curr);
+                continue;
+            }
+            // Rotation cases
             if (currVType[0] == 0) { // Rolling up from the left
-                switch (currVType[1]) {
-                    case 1: // (0,1) node - promotion case - NON TERMINAL
-                        // promote
-                        counter++;
-                        curr = curr.parent;
-                        currVType = verticeType(curr);
-                        break;
-                    case 2: // (0,2) node - rotation cases - TERMINAL
-                        WAVLNode currChild = curr.left;
-                        int[] childVType = verticeType(currChild);
+                assert (currVType[1] == 2); // (0,2)
 
-                        if (childVType[0] == 1 && childVType[1] == 2) {
-                            // single rotation to the right
-                            counter++;
-                            return counter;
-                        }
-                        else if (childVType[0] == 2 && childVType [1] == 1) {
-                            /* else if is for debugging purposes. I want to check later if
-                            * any other conditions can occur - they shouldn't according to
-                            * the algorithm. If everything's ok I'll change it to else*/
-                            // double rotation to the left
-                            counter++;
-                            return counter;
-                        }
+                int[] childVType = verticeType(curr.left);
+
+                if (childVType[0] == 1 && childVType[1] == 2) { // child is (1,2)
+                    rightRotate(curr);
+                } else {
+                    assert (childVType[0] == 2 && childVType[1] == 1); // child is (2,1)
+                    doubleRotateRight(curr);
+                }
+            } else if (currVType[1] == 0) { //Rolling up from the right
+                assert (currVType[0] == 2); // (2,0)
+
+                int[] childVType = verticeType(curr.right);
+
+                if (childVType[0] == 2 && childVType[1] == 1) { //child is (2,1)
+                    leftRotate(curr);
+                } else {
+                    assert (childVType[0] == 1 && childVType[1] == 2); // child is (1,2)
+                    doubleRotateLeft(curr);
                 }
             }
-
-            else if (currVType[1] == 0) { //Rolling up from the right
-                switch (currVType[0]) {
-                    case 1: // (1,0) node - promotion case - NON TERMINAL
-                        // promote
-                        counter++;
-                        curr = curr.parent;
-                        currVType = verticeType(curr);
-                        break;
-                    case 2: // (2,0) node - rotation cases - TERMINAL
-                        WAVLNode currChild = curr.right;
-                        int[] childVType = verticeType(currChild);
-
-                        if (childVType[0] == 2 && childVType[1] == 1) {
-                            // single rotation to the left
-                            counter++;
-                            return counter;
-                        }
-
-                        else if (childVType[0] == 1 && childVType[1] == 2) {
-                            // double rotation to the left
-                            counter++;
-                            return counter;
-                        }
-                    }
-                }
+            return counter;
         }
         return counter;
     }
@@ -722,6 +705,14 @@ public class WAVLTree implements Iterable {
     private WAVLNode parent;
     private int subtreeSize;
     private int rank;
+
+        /**
+         * Constructor for the WAVLNode class. Creates new node item with provided key
+         * and value.<br>
+         *
+         * @param key       the node's key, which will determine its place in the tree
+         * @param value     the info that will be associated with the key
+         */
 
     public WAVLNode(int key, String value) {
         this.key = key;
