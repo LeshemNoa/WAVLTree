@@ -1,6 +1,4 @@
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
+import java.util.*;
 
 /**
  *
@@ -13,17 +11,15 @@ import java.util.List;
 
 public class WAVLTree implements Iterable {
     private WAVLNode root;
-    private int treeSize; // not necessary??
 
-    //TODO constructor? overloaded constructor?
-    public WAVLTree(int key, String value) {
+    /*public WAVLTree(int key, String value) {
+        if ()
         this.root = new WAVLNode(key, value);
-    }
+    }*/
 
     public WAVLTree() {
-        this.root = null;
-        this.treeSize=0;
     }
+
     public WAVLTree(WAVLNode node) {
         this.root = node;
     }
@@ -36,7 +32,7 @@ public class WAVLTree implements Iterable {
      * @return          true if tree is empty, otherwise false
      *
      */
-  public boolean empty() {
+    public boolean empty() {
       return (root == null);
   }
 
@@ -55,7 +51,7 @@ public class WAVLTree implements Iterable {
      * @return          value associated with key k, or null if k is not
      *                  in the tree.
      */
-  public String search(int k) {
+    public String search(int k) {
       WAVLNode found = findNode(k, root);
       if (found != null)
           return found.value;
@@ -73,10 +69,10 @@ public class WAVLTree implements Iterable {
      * from the root to the deepest leaf in the worst case.
      *
      * @param k         the key being searched
-     * @param node      node at the root of the subtree in which we search for k
+     * @param node      node at the root of the subtree in which k is searched
      * @return          node with key k, or null if k is not in the tree.
      */
-  private WAVLNode findNode(int k, WAVLNode node) {
+    private WAVLNode findNode(int k, WAVLNode node) {
       if (k == node.key)
           return node;
       else if (k > node.key && node.right != null)
@@ -86,200 +82,603 @@ public class WAVLTree implements Iterable {
       return null;
   }
 
-//TODO Nadine - Insert
-  // nadine: created this new method.
-  /**
-   * public int insert(int k, String i)
-   *
-   * inserts an item with key k and info i to the WAVL tree.
-   * the tree must remain valid (keep its invariants).
-   * returns the number of rebalancing operations, or 0 if no rebalancing operations were necessary.
-   * returns -1 if an item with key k already exists in the tree.
-   */
-  
-
-   public int insert(int k, String i) {
-	   
-	   WAVLNode toInsert = new WAVLNode(k,i);
-	   int x = insert(toInsert, root); // TODO give meaningful name to the variable
-	   return x;
-
-	   
-   }
-   /** Insert function with an additional node parameter*/
-   // insert a node and call promote and rotation method if needed. this method return the 
-   //number of rotation which is taken from the promotion and rotation methods.
-   private int insert(WAVLNode toInsert, WAVLNode node) { // Noa: made private
-
-        if (root == null) {
-            root = toInsert;
-        }
-
-        if (toInsert.key < node.key) {
-            if (node.left != null) {
-                insert(toInsert, node.left);
-
-            } else {
-                toInsert.setParent(node);
-                node.left = toInsert;
-            }
-        }
-
-        else if (toInsert.key >= node.key) {
-            if (node.right != null) {
-                insert(toInsert, node.right);
-
-            } else {
-                toInsert.setParent(node);
-                node.right = toInsert;
-            }
-        }
-
-        int numOfRotations = promote(toInsert);
-        return numOfRotations;
-
-    }
-
- /**
-  * after the insertion, we need to update rank. the rank of a leaf is 1. then we continue in recursion to the node's father and 
-  * we add to the father's rank 1 until one of 3 conditions occur:
-  * 1- we reached the root. in this case we have no longer what to update
-  * 2-if before the insertion we had a rank difference of 2 , it doesnt matter what is the rank of the other child
-  * in either cases if we add to the father 1 we get a balanced tree
-  * 3- after the insertion we have a rank differences of 0-2. in this case we cant promote the father 
-  * as we get unbalanced tree. so the promotion process stops and now we need to do some rotations.
-  * 
-  */
-   
-   private int promote(WAVLNode node) {
-       if (node == null) {
+    /**
+     * Inserts new node, with provided key and value, to the tree. <br>
+     *
+     * If a node with key k already exists in the tree, -1 will be returned. Otherwise,
+     * the function returns the number of rank changes, rotations and double-rotations
+     * required in order to maintain the WAVL tree invariants, that may have been violated
+     * during insertion.<br>
+     *
+     * This method runs in O(h) = O(logn) time in the worst case. The runtime complexity
+     * will be determined by the time it takes to find the insertion place, the time
+     * complexity of the rebalancing process, and the time it takes to update the subtree
+     * sizes of the new node's ancestors. All of these processes will involve all nodes
+     * along the path from the deepest leaf in the tree to the root in the worst case so they
+     * run in O(h) = O(logn), hence the time complexity of insertion will be O(logn) as well.
+     *
+     * @param k     the key of the new node added to the tree
+     * @param i     the info of the new node added to the tree
+     * @return      the number of rebalancing operations performed during the rebalancing
+     *              process, or -1 if a node with key k already exists in the tree
+     */
+    public int insert(int k, String i) {
+       /* Step 1: Check if tree is empty. If it is, insert new node as root and finish */
+       if (root == null) {
+           root = new WAVLNode(k, i);
            return 0;
        }
 
-       else if (node == root) { // Halting condition - reached root or tree was empty
-    	   return 0;
-       }
+       /* Step 2: Check if key k is already in the tree, or where to insert it if it
+       isn't, using the findInsertionPlace method. */
+       WAVLNode parentNode = findInsertionPlace(k, root);
+       if (parentNode.key == k)
+           return -1;
 
-       else if (node.parent.rank - node.rank == 2) { // rank difference 2 between child and parent
-           // this is supposed to be the non problematic case where we replace an external node with
-           // new node, update its rank to zero as it's a leaf and finish
-    	   node.rank = 0;
-    	   return 1;
-       }
+       /* Step 3: Place new node in appropriate place.*/
+       WAVLNode newNode = new WAVLNode(k, i, parentNode);
 
-       else if (node.rank == node.parent.rank) { // rank difference 0 between child and parent
+       /* Step 4: Rebalance */
+       int numOfOperations = insertionRebalance(parentNode);
 
-           if(node.parent.getBalance() == 2) { // parent node is (0,2) - rotation case
-    		  int num_of_rotations = rotate(node.parent);
-    		   return num_of_rotations;
-    	   }
-
-       } else {
-    	   promote(node.parent);
-       }
-
-      return 0;
-   }
-   
-  //rotation method. should check if another rotation is needed.
-   private int rotate(WAVLNode node) {
-	   int balance = update_Balance(node);
-
-	   if (balance == -2) {
-			if (node.left.left.rank>=node.left.right.rank) {
-				 rotateRight(node);
-				 return 1;
-			} else {
-				//doubleRotateLeftRight(node);
-				return 2;
-			}
-
-	   } else if (balance == 2) {
-			if(node.right.right.rank>=node.right.left.rank) {
-				rotateLeft(node);
-				return 1;
-			} else {
-				//doubleRotateRightLeft(node);
-				return 2;
-			}}
-			else {
-				return 0;
-			}
-		}
-	   
-// check the rank difference between left and right node.
-	private int update_Balance(WAVLNode node) {
-		int balance = node.right.rank-node.left.rank;
-		node.setBalance(balance);
-		return 	balance;	
-		}
-// new- rotate left
-	public void rotateLeft(WAVLNode node) {
-		
-		WAVLNode newtop_node = node.right;
-		newtop_node.parent = node.parent;
-		
-		node.right = newtop_node.left;
-		
-		if(node.right!=null) {
-			node.right.parent=node;
-		}
-		
-		newtop_node.left = node;
-		node.parent = newtop_node;
-		
-		if(newtop_node.parent!=null) {
-			if(newtop_node.parent.right==node) {
-				newtop_node.parent.right = newtop_node;
-			} else if(newtop_node.parent.left==node) {
-				newtop_node.parent.left = newtop_node;
-			}
-		}
-		node.setRank(-1);
-	
-	}
-// new- rotate right
-public void rotateRight(WAVLNode node) {
-		
-		WAVLNode newtop_node = node.left;
-		newtop_node.parent = node.parent;
-		
-		node.left = newtop_node.right;
-		
-		if(node.left!=null) {
-			node.left.parent=node;
-		}
-		
-		newtop_node.right = node;
-		node.parent = newtop_node;
-		
-		
-		if(newtop_node.parent!=null) {
-			if(newtop_node.parent.right==node) {
-				newtop_node.parent.right = newtop_node;
-			} else if(newtop_node.parent.left==node) {
-				newtop_node.parent.left = newtop_node;
-			}
-		}
-		node.setRank(-1);
-	
-	}
-	 
-//TODO Noa - Delete
-
-  /**
-   * public int delete(int k)
-   *
-   * deletes an item with key k from the binary tree, if it is there;
-   * the tree must remain valid (keep its invariants).
-   * returns the number of rebalancing operations, or 0 if no rebalancing operations were needed.
-   * returns -1 if an item with key k was not found in the tree.
-   */
-   public int delete(int k)
-   {
-           return 42;   // to be replaced by student code
+       return numOfOperations;
    }
 
+    /**
+     * Finds the appropriate parent node for a new node with key k to be inserted,
+     * or an existing node with key k. <br>
+     *
+     * This method utilizes the BST property of the WAVL tree to move recursively
+     * from a root node to one of its subtrees, according to k and the key held at
+     * the node.<br>
+     *
+     * It searches the tree to find the unary node or the leaf which will be the
+     * parent of the new node with key k. If the node returned has key k, then the
+     * new node should ne be reinserted. <br>
+     *
+     * This function runs in O(h) = O(logn) time as it traverses a path from the root
+     * to the deepest leaf in the worst case.
+     *
+     * @param k         key of the new node inserted
+     * @param node      node at the root of the subtree in which the insertion place
+     *                  is searched
+     * @return          the node to which the node inserted is assigned to as
+     *                  its left or right child
+     *
+     */
+   private WAVLNode findInsertionPlace(int k, WAVLNode node) {
+       if (k == node.key)
+           return node;
+       else if (k > node.key) {
+           if (node.right == null)
+           /* Node is free to accept new node with key k as its right child */
+               return node;
+           else
+           /* Node has a right subtree, hence new node with key k will be placed there */
+               return findInsertionPlace(k, node.right);
+       }
+       else {
+           if (node.left == null)
+           /* Node is free to accept new node with key k as its left child */
+               return node;
+           else
+           /* Node has a left subtree, hence new node with key k will be placed there */
+                return findInsertionPlace(k, node.left);
+       }
+   }
+
+    /**
+     * Characterizes the type of node by the rank differences with its children.<br>
+     *
+     * If the node is a unary node, then the missing child is referred to as an external
+     * node with rank -1. Returns a size 2 array containing the rank differences, left to right.
+     * This allows to determine the course of action during the rebalancing process.<br>
+     *
+     * This function runs in O(1) time as it only requires access to pointers, and the creation
+     * of a fixed sized array.
+     *
+     * @param node      the node of which the rank differences are returned
+     * @return          a size 2 array: array[0] - rank difference between the node
+     *                  and its left child; array[1] - rank difference between the node
+     *                  and its right child
+     */
+    private int[] verticeType(WAVLNode node) {
+       int[] rankDiffs = new int[2];
+
+       if (node.left != null)
+           rankDiffs[0] = node.rank - node.left.rank;
+       else
+           rankDiffs[0] = node.rank - (-1);
+
+       if (node.right != null)
+           rankDiffs[1] = node.rank - node.right.rank;
+        else
+           rankDiffs[1] = node.rank - (-1);
+
+       return rankDiffs;
+    }
+
+    /**
+     * Receives a size 2 array of rank differences produced by the verticeType function,
+     * and checks if the vertice type is valid according to the WAVL rules. <br>
+     *
+     * Returns a boolean value - true if the vertice type is one of the following: {(1,1),
+     * (1,2), (2,1), (2,2)}, and false otherwise, implying rebalancing is required. <br>
+     *
+     * This function runs in O(1) time as it iterates on a fixed sized array.
+     *
+     * @param vType     a size 2 array of rank differences between a certain node in the tree
+     *                  and its two children
+     * @return          true if vertice type is in accordance with the WAVL invariants, false
+     *                  otherwise
+     */
+    private boolean isValidType(int[] vType) {
+        for (int rankDiff : vType) {
+            if (rankDiff != 1) {
+                if (rankDiff != 2)
+                    return false;
+            }
+        }
+        return true;
+    }
+
+    /**
+     * Rebalances WAVL tree after insertion. <br>
+     *
+     * Receives a tree node where a violation of the WAVL tree invariants may have occurred
+     * as a result of an insertion, and corrects it by performing a series of rebalancing actions
+     * up the path from the given node to the root of the tree.<br>
+     *
+     * @return          number of promotions, rotations and double rotations performed
+     *                  during the rebalancing process
+     */
+    private int insertionRebalance(WAVLNode node) {
+        int counter = 0;
+        WAVLNode curr = node;
+        int[] currVType = verticeType(node);
+
+        while (curr != null && !isValidType(currVType)) { // curr!= null: Haven't reached the root yet
+
+            if (currVType[0] + currVType[1] == 1) { // (0,1), (1,0) Promotion cases
+                counter++;
+                curr.rank++;
+                curr = curr.parent;
+                if (curr != null)
+                    currVType = verticeType(curr);
+                continue;
+            }
+            // Rotation cases
+
+            if (currVType[0] == 0) { // Rolling up from the left
+                assert (currVType[1] == 2); // (0,2)
+
+                int[] childVType = verticeType(curr.left);
+
+                if (childVType[0] == 1 && childVType[1] == 2) { // child is (1,2)
+                    counter += rotateRight(curr, true);
+                } else {
+                    assert (childVType[0] == 2 && childVType[1] == 1); // child is (2,1)
+                    counter += doubleRotateRight(curr, true);
+                }
+
+            } else if (currVType[1] == 0) { // Rolling up from the right
+                assert (currVType[0] == 2); // (2,0)
+
+                int[] childVType = verticeType(curr.right);
+
+                if (childVType[0] == 2 && childVType[1] == 1) { //child is (2,1)
+                    counter += rotateLeft(curr, true);
+                } else {
+                    assert (childVType[0] == 1 && childVType[1] == 2); // child is (1,2)
+                    counter += doubleRotateLeft(curr, true);
+                }
+            }
+            return counter;
+        }
+        return counter;
+    }
+
+
+    /**
+     * Performs a single rotation to the right of the subtree of which the node
+     * provided is the root. <br>
+     *
+     * Illustration below is in accordance with variable names:
+     *
+     *        p                    p
+     *        |                    |
+     *        z                    x
+     *      /  \  Rotate right   /  \
+     *     x   y                a   z
+     *    / \                      / \
+     *   a  b                     b  y
+     *
+     * During insertion, node z is demoted during this rotation. All other nodes retain their ranks. <br>
+     *
+     * During deletion, node x is promoted, and z is demoted once or twice, depending
+     * on z's children. If z becomes a leaf after the rotation and is only demoted once,
+     * its rank difference with the external leaf y becomes 2, causing a violation of
+     * the invariants, as leaves are only allowed to be (1,1) vertices.
+     * To solve this, z is demoted once again. All other nodes retain their ranks.<br>
+     *
+     * This method runs in O(1) time as it only requires changing a fixed number of pointers.
+     *
+     * @param z     the node at the root of the subtree rotated
+     * @return      the number of rebalancing step made during this process -
+     *              1 rotation + the number of promotions and demotions made
+     */
+    @SuppressWarnings("Duplicates")
+    private int rotateRight(WAVLNode z, boolean insert) {
+        int counter = 1;
+
+        WAVLNode x = z.left;
+        WAVLNode b = x.right;
+
+        z.replaceWith(x);
+
+        x.setRightChild(z);
+        z.setLeftChild(b);
+
+        if (insert) {
+            z.rank--;
+            counter++;
+        }
+        else {
+            z.rank--;
+            x.rank++;
+            counter += 2;
+            if (! z.isInnerNode()) {
+                z.rank--;
+                counter++;
+            }
+        }
+        return counter;
+    }
+
+    /**
+     * Performs a single rotation to the left of the subtree of which the node
+     * provided is the root. <br>
+     *
+     * Illustration below is in accordance with variable names:
+     *
+     *     p                     p
+     *     |                     |
+     *     z                     y
+     *   /  \   Rotate left    /  \
+     *  x   y                 z   b
+     *     / \               / \
+     *    a  b              x  a
+     *
+     * During insertion, node z is demoted during this rotation. All other nodes retain their ranks<br>
+     *
+     * During deletion, node y is promoted, and z is demoted once or twice, depending
+     * on z's children. If z becomes a leaf after the rotation and is only demoted once,
+     * its rank difference with the external leaf x becomes 2, causing a violation of
+     * the invariants, as leaves are only allowed to be (1,1) vertices.
+     * To solve this, z is demoted once again. All other nodes retain their ranks.<br>
+     *
+     * This method runs in O(1) time as it only requires changing a fixed number of pointers.
+     *
+     * @param z     the node at the root of the subtree rotated
+     * @return      the number of rebalancing step made during this process -
+     *              1 rotation + the number of promotions and demotions made
+     */
+    @SuppressWarnings("Duplicates")
+    private int rotateLeft(WAVLNode z, boolean insert) {
+        int counter = 1;
+
+        WAVLNode y = z.right;
+        WAVLNode a = y.left;
+
+        z.replaceWith(y);
+
+        y.setLeftChild(z);
+        z.setRightChild(a);
+
+
+        if (insert) {
+            z.rank--;
+            counter++;
+        }
+        else {
+            z.rank--;
+            y.rank++;
+            counter += 2;
+            if (! z.isInnerNode()) {
+                z.rank--;
+                counter++;
+            }
+        }
+        return counter;
+    }
+
+    /**
+     * Performs a double rotation to the right of the subtree of which the node
+     * provided is the root. <br>
+     *
+     * Illustration below is in accordance with variable names:
+     *
+     *      p                            p
+     *      |                            |
+     *      z                            b
+     *     / \                         /   \
+     *    x  y  Double rotate right   x    z
+     *   / \                         / \  / \
+     *  a  b                        a  c d  y
+     *    / \
+     *   c  d
+     *
+     * During insertion, nodes y and z are demoted, and node a is promoted during this
+     * rotation. All other nodes retain their ranks.<br>
+     *
+     * During deletion, the rank of node b increases by 2, that of node z decreases by 2,
+     * and that of x decreases by 1. All other nodes retains their ranks. <br>
+     * This method runs in O(1) time as it only requires changing a fixed number of pointers.
+     *
+     * @param z     the node at the root of the subtree rotated
+     * @return      the number of rebalancing step made during this process -
+     *              1 rotation + the number of promotions and demotions made
+     *
+     */
+
+    private int doubleRotateRight(WAVLNode z, boolean insert) {
+        int counter = 1;
+
+        WAVLNode x = z.left;
+        WAVLNode b = x.right;
+        WAVLNode c = b.right;
+        WAVLNode d = b.left;
+
+        z.replaceWith(b);
+
+        b.setLeftChild(x);
+        b.setRightChild(z);
+        x.setRightChild(c);
+        z.setLeftChild(d);
+
+        if (insert) {
+            x.rank--;
+            z.rank--;
+            b.rank++;
+            counter += 3;
+        } else {
+            b.rank += 2;
+            z.rank -= 2;
+            x.rank--;
+            counter += 5;
+        }
+        return counter;
+    }
+
+    /**
+     * Performs a double rotation to the right of the subtree of which the node
+     * provided is the root. <br>
+     *
+     * Illustration below is in accordance with variable names:
+     *
+     *    p                            p
+     *    |                            |
+     *    z                            a
+     *   / \                         /   \
+     *  x  y   Double rotate left   z    y
+     *    / \                      / \  / \
+     *   a  b                     x  c d  b
+     *  / \
+     * c  d
+     *
+     * During insertion, nodes y and z are demoted, and node a is promoted during this
+     * rotation. All other nodes retain their ranks.<br>
+     *
+     * During deletion, the rank of node a increases by 2, that of node z decreases by 2,
+     * and that of y decreases by 1. All other nodes retains their ranks. <br>
+     *
+     * This method runs in O(1) time as it only requires changing a fixed number of pointers.
+     *
+     * @param z     the node at the root of the subtree rotated
+     * @return      the number of rebalancing step made during this process -
+     *              1 rotation + the number of promotions and demotions made
+     *
+     */
+    private int doubleRotateLeft(WAVLNode z, boolean insert) {
+        int counter = 1;
+
+        WAVLNode y = z.right;
+        WAVLNode a = y.left;
+        WAVLNode c = a.left;
+        WAVLNode d = a.right;
+
+        z.replaceWith(a);
+
+        a.setLeftChild(z);
+        a.setRightChild(y);
+        z.setRightChild(c);
+        y.setLeftChild(d);
+
+        if (insert) {
+            y.rank--;
+            z.rank--;
+            a.rank++;
+        } else {
+            a.rank += 2;
+            z.rank -= 2;
+            y.rank--;
+            counter += 5;
+        }
+        return counter;
+    }
+
+    /**
+     * Removes node with provided key from the tree. <br>
+     *
+     * If a node with key k does not exist in the tree, -1 will be returned. Otherwise,
+     * the function returns the number of rank changes, rotations and double-rotations
+     * required in order to maintain the WAVL tree invariants, that may have been violated
+     * during deletion.<br>
+     *
+     * This method runs in O(h) = O(logn) time in the worst case. The runtime complexity
+     * will be determined by the time it takes to find the node to delete, the time
+     * complexity of the rebalancing process, and the time it takes to update the subtree
+     * sizes of the deleted node's ancestors. All of these processes will involve all nodes
+     * along the path from the deepest leaf in the tree to the root in the worst case so they
+     * run in O(h) = O(logn), hence the time complexity of insertion will be O(logn) as well.
+     *
+     * @param k     key of node to be removed from the tree, if it exists in it
+     * @return      the number of rebalancing operations performed during the rebalancing
+     *              process, or -1 if node with key k was not found in the tree
+     */
+   public int delete(int k) {
+       /* Step 1: Check if node with key k we wish to remove is in the tree, and find it
+       * if it is */
+       WAVLNode node = findNode(k, root);
+       if (node == null)
+           return -1;
+
+       /* Step 2: Delete node */
+       WAVLNode offender;
+
+            /* Case a: Deleting a leaf */
+       if (! node.isInnerNode()) { // leaf
+           offender = deleteLeaf(node);
+       }
+            /* Case b: Deleting a unary node with right child or a binary node */
+       else if (node.right != null) {
+           WAVLNode successor = nodeWithMinKey(node.right);
+           node.key = successor.key;
+           node.value = successor.value;
+
+           /* Can happen in case of deleting a unary node with right child who is a leaf,
+            or in case of deleting a binary node whose successor is a leaf */
+           if (! successor.isInnerNode())
+               offender = deleteLeaf(successor);
+
+           /* Can happen in case of deleting a binary node whose successor is unary node
+            with left child, who is a leaf */
+           else {
+               successor.key = successor.left.key;
+               successor.value = successor.left.value;
+               successor.rank--;
+               offender = deleteLeaf(successor.left);
+           }
+
+       }
+            /* Case c: Deleting a unary node with left child */
+       else {
+           node.key = node.left.key;
+           node.value = node.left.value;
+           node.rank--;
+           offender = deleteLeaf(node.left);
+       }
+
+       /* Step 3: Rebalance */
+       int numOfOperations = deletionRebalance(offender);
+
+       /* Step 4: Update subtree sizes in all of the deleted node's ancestors */
+       WAVLNode curr = offender;
+       while (curr != null) {
+           curr.subtreeSize--;
+           curr = curr.parent;
+       }
+
+       return numOfOperations;
+   }
+
+   private int deletionRebalance(WAVLNode node) {
+       int counter = 0;
+       WAVLNode curr = node;
+       int[] currVType = verticeType(node);
+
+       while (curr != null && !isValidType(currVType)) {
+           counter++;
+
+           if (currVType[0] + currVType[1] == 5) { // (3,2), (2,3) Demotion Cases
+               curr.rank--;
+               curr = curr.parent;
+               if (curr != null)
+                    currVType = verticeType(curr);
+               continue;
+           }
+
+
+           if (currVType[0] == 3) { // Rolling up from the right
+
+               int[] childVType = verticeType(curr.right);
+
+               if (currVType[1] == 1 && childVType[0] + childVType[1] == 4) { // child is (2,2) - Double demote
+                   curr.rank--;
+                   curr.right.rank--;
+                   counter += 2; // Two demotions
+                   curr = curr.parent;
+                   if (curr != null)
+                        currVType = verticeType(curr);
+               }
+               else if (childVType[1] == 1){ // child is (1,1) or (2,1)
+                   counter += rotateLeft(curr, false);
+                   return counter;
+
+               }
+
+               else {
+                   assert (childVType[0] == 1 && childVType[1] == 2);
+                   counter += doubleRotateLeft(curr, false);
+                   return counter;
+               }
+
+           } else if (currVType[1] == 3) { // Rolling up from the left
+
+               int[] childVType = verticeType(curr.left);
+
+               if (currVType[0] == 1 && childVType[0] + childVType[1] == 4) { // child is (2,2) - Double demote
+                   curr.rank--;
+                   curr.left.rank--;
+                   counter += 2;
+                   curr = curr.parent;
+                   if (curr != null)
+                        currVType = verticeType(curr);
+               }
+
+               else if (childVType[0] == 1) { // child is (1,1) or (1,2)
+                   counter += rotateRight(curr, false);
+                   return counter;
+               }
+
+               else {
+                   assert (childVType[0] == 2 && childVType[1] == 1);
+                   counter += doubleRotateRight(curr, false);
+                   return counter;
+               }
+           }
+       }
+       return counter;
+   }
+
+
+
+    /**
+     * Deletes a leaf node by placing a null value in its parent's appropriate child field,
+     * and a null value in its parent field. Returns the deleted node's parent. <br>
+     *
+     * That way, it becomes an isolated node object. With no reference left to it, the object
+     * is eventually removed by the garbage collector.
+     *
+     * @param node      leaf to be removed from the tree
+     * @return          its parent node, or null in case the node deleted was the root
+     *                  of a size 1 tree
+     */
+    private WAVLNode deleteLeaf(WAVLNode node) {
+
+        WAVLNode parent = node.parent;
+
+        if (parent != null) {
+            if (node.key > parent.key) { // remove right child
+                parent.right = null;
+            } else {
+                parent.left = null;
+            }
+            node.parent = null;
+        }
+
+        return parent;
+    }
 
 
     /**
@@ -393,7 +792,7 @@ public void rotateRight(WAVLNode node) {
          */
         @Override
         public boolean hasNext() {
-            return (counter < treeSize);
+            return (counter < root.subtreeSize);
         }
 
         /**
@@ -490,30 +889,9 @@ public void rotateRight(WAVLNode node) {
     *
     */
 
-//returns how many nodes are in a tree. 
-   public int size()
-   {
-	   return size_Node(root);
+   public int size() {
+           return root.subtreeSize;
    }
- //returns how many nodes are in a specific node.  
-   private int size_Node(WAVLNode node) {
-	        if (empty()) {
-	            return 0;
-	        }
-	        int left = 0, right = 0;
-	        if (node.left != null) {
-	            left = size_Node(node.left);
-	        }
-	        if (node.right != null) {
-	            right = size_Node(node.right);
-	        }
-	        node.setSize(left+right + 1);
-	        return node.size;
-	    }
-	   
-	   
-	   
-  
    
     /**
     * public WAVLNode getRoot()
@@ -529,112 +907,223 @@ public void rotateRight(WAVLNode node) {
 
 
     /**
-    * public int select(int i)
-    *
-    * Returns the value of the i'th smallest key (return -1 if tree is empty)
-    * Example 1: select(1) returns the value of the node with minimal key 
-        * Example 2: select(size()) returns the value of the node with maximal key 
-        * Example 3: select(2) returns the value 2nd smallest minimal node, i.e the value of the node minimal node's successor  
-    *
-    */
+     * Returns the info of the i'th greatest key in the tree, or null if i = 0 or if there
+     * are less than i keys in the tree <br>
+     *
+     * Uses the WAVLIterator and finds the required node by performing i calls to next. <br>
+     *
+     * The function runs in O(nlogn) in time as in the worst case, as it performs n cosecutive
+     * Successor calls with worst case runtime complexity of O(logn) each. However, in HW2 we proved
+     * that a tighter complexity bound would be O(n+h) = O(n+logn) = O(n).<br>
+     *
+     * @param i         the number of key to be found on the i'th step of an in-order
+     *                  walk of the tree
+     * @return          the value associated with the i'th greatest key in the tree
+     */
 
+    public String select(int i) {
+        if (root == null || i > root.subtreeSize || i == 0)
+            return null;
 
-// TODO Nadine
-   public String select(int i)
-   {
-           return null; 
+        WAVLNode curr = null;
+        WAVLIterator iter = new WAVLIterator();
+        for (int j = 0; j < i; j++) {
+            curr = iter.next();
+        }
+
+        return curr == null ? null : curr.value;
    }
 
     /**
-   * public class WAVLNode
-   */
-   // size is added because there was a function above to complete. if we can
-   // delete things maybe there is no use for size.
-   // rank is added, parent, balance
-  public class WAVLNode{
-	  
-    private WAVLNode parent;
-	private int key;
-    private String value;
-    private WAVLNode left;
-    private WAVLNode right;
-    private int subtreeSize;
-    private int rank;
-    private int size;
-    private int balance;
+     *
+     */
+    public class WAVLNode {
 
-    public WAVLNode(int key,String value) {
-        this.key = key;
-        this.value = value;
-        this.right = null;
-        this.left = null;
-        this.parent = null;
-        this.subtreeSize = 0;
-        this.rank = 0;
-        this.size = 0;
-        this.balance = 0;
-    }
+        private int key;
+        private String value;
+        private WAVLNode left;
+        private WAVLNode right;
+        private WAVLNode parent;
+        private int subtreeSize;
+        private int rank;
 
-    public int getKey() {
-        return key;
-    }
+            /**
+             * Constructor for the WAVLNode class. Creates new node item with provided key
+             * and value.<br>
+             *
+             * @param key       the node's key, which will determine its place in the tree
+             * @param value     the info that will be associated with the key
+             */
 
-    public String getValue()
-    {
-        return this.value;
-    }
-    public WAVLNode getLeft()
-    {
-        return left;
-    }
-    public WAVLNode getRight()
-    {
-        return right;
-    }
-    public boolean isInnerNode()
-    {
-        return left != null || right != null;
-    }
+        private WAVLNode(int key, String value) {
+            this.key = key;
+            this.value = value;
+            this.right = null;
+            this.left = null;
+            this.parent = null;
+            this.subtreeSize = 0;
+        }
 
-//TODO Required complexity: O(1), let's think about it later
-    // why is this function here ? it should be a tree function i think
-    public int getSubtreeSize()
-    {
-        return 42; // to be replaced by student code
+            /**
+             * Overloaded constructor for the WAVLNode class, with an additional parent node
+             * parameter.<br>
+             *
+             * @param key       the new node's key
+             * @param value     the new node's info
+             * @param parent    the new node's parent
+             */
+        private WAVLNode(int key, String value, WAVLNode parent) {
+            this(key, value);
+            this.rank = 0;
+            if (key > parent.key)
+                parent.setRightChild(this);
+            else
+                parent.setLeftChild(this);
+
+            /* Update subtree sizes for all ancestors */
+            WAVLNode curr = parent.parent;
+            while (curr != null) {
+                curr.subtreeSize++;
+                curr = curr.parent;
+            }
+
+        }
+
+        public int getKey() {
+            return key;
+        }
+
+        public String getValue()
+        {
+            return this.value;
+        }
+        public WAVLNode getLeft()
+        {
+            return left;
+        }
+        public WAVLNode getRight()
+        {
+            return right;
+        }
+
+            /**
+             * Returns true if the node has any (non-null) children, and false if it's a leaf. <br>
+             *
+             * @return          true if node has any children, false otherwise
+             */
+        public boolean isInnerNode()
+        {
+            return (left != null || right != null);
+        }
+            /**
+             * Returns the number of nodes whose this node is an ancestor of. <br>
+             *
+             * @return          total number of nodes in this node's left and right subtrees
+             */
+        public int getSubtreeSize()
+        {
+            return subtreeSize + 1;
+        }
+
+            /**
+             * Sets the right child of a node to be the node provided. <br>
+             *
+             * Updates the parent field for the child node as well, to maintain the doubly
+             * linked structure of the tree. In addition, updates the node's subtree size in
+             * case the new child comes with its own children, and in case the new right
+             * child is null. <br>
+             *
+             * @param rChild        node to be set as the right child, or null value
+             */
+        private void setRightChild(WAVLNode rChild) {
+            this.right = rChild;
+            if (rChild != null) {
+                rChild.parent = this;
+            }
+
+            this.updateSubTreeSize();
+        }
+
+        /**
+         * Sets the left child of a node to be the node provided. <br>
+         *
+         * Updates the parent field for the child node as well, to maintain the doubly
+         * linked structure of the tree. In addition, updates the node's subtree size in
+         * case the new child comes with its own children, and in case the new left
+         * child is null. <br>
+         *
+         * @param lChild        node to be set as the right child, or null value
+         */
+        private void setLeftChild(WAVLNode lChild) {
+
+            this.left = lChild;
+            if (lChild != null) {
+                lChild.parent = this;
+            }
+
+            this.updateSubTreeSize();
+        }
+
+        /**
+         *
+         */
+        private void updateSubTreeSize() {
+
+            this.subtreeSize =
+                    (this.right == null ? 0 : this.right.subtreeSize + 1) +
+                    (this.left == null ? 0 : this.left.subtreeSize + 1);
+
+            if (this.parent != null) {
+                this.parent.updateSubTreeSize();
+            }
+        }
+
+
+        /**
+         * Replaces a node with one of its descendants. <br>
+         *
+         * This methods takes care of the case where the node replaced is the root of the entire tree.
+         * It's called during rotations and during deletions. <br>
+         *
+         * If the node replaced is the root of the tree, the replacing node's parent field is
+         * nullified, and it's placed as the root node of the WAVL tree object. Otherwise, it's
+         * set to be the appropriate child of the parent of the replaced node, according to how its key
+         * relates to the parent's key.
+         *
+         * @param replacer       the node to take this the current node's place
+         */
+        private void replaceWith(WAVLNode replacer) {
+
+            WAVLNode parent = this.parent;
+            WAVLNode repParent = replacer.parent;
+
+            /* Step 1: Remove replacer as child of its parent */
+            if (repParent != null) {
+                if (replacer.key > repParent.key)
+                    repParent.right = null;
+                else
+                    repParent.left = null;
+
+                repParent.updateSubTreeSize();
+            }
+
+            /* Step 2: Set replacer as child of the replaced node, doubly linked */
+            if (parent != null) {
+                if (this.key < parent.key) {
+                    parent.setLeftChild(replacer);
+                } else {
+                    parent.setRightChild(replacer);
+                }
+            }
+            else {
+                replacer.parent = null;
+                root = replacer;
+                root.updateSubTreeSize();
+            }
+        }
+
+        public int getRank() {
+            return this.rank;
+        }
     }
-// new
-	public WAVLNode getParent() {
-		return parent;
-	}
-//new - made private
-	private void setParent(WAVLNode parent) {
-		this.parent = parent;
-	}
-//new - made private
-	private int getRank() {
-		return rank;
-	}
-//new - made private
-	private void setRank(int addrank) {
-		this.rank = rank + addrank;
-	}
-//new - made private
-	private int getSize() {
-		return size;
-	}
-//new - made private
-	private void setSize(int size) {
-		this.size = size;
-	}
-//new - made private
-	private int getBalance() {
-		return balance;
-	}
-//new - made private
-	private void setBalance(int balance) {
-		this.balance = balance;
-	}
-
-  }
-
 }
