@@ -1027,7 +1027,7 @@ public class WAVLTree implements Iterable {
             this.right = null;
             this.left = null;
             this.parent = null;
-            this.subtreeSize = 0;
+            this.subtreeSize = 1;
         }
 
         /**
@@ -1119,7 +1119,7 @@ public class WAVLTree implements Iterable {
          */
         public int getSubtreeSize()
         {
-            return subtreeSize + 1;
+            return subtreeSize;
         }
 
         /**
@@ -1181,9 +1181,9 @@ public class WAVLTree implements Iterable {
          */
         private void updateSubtreeSize() {
 
-            this.subtreeSize =
-                    (this.right == null ? 0 : this.right.subtreeSize + 1) +
-                    (this.left == null ? 0 : this.left.subtreeSize + 1);
+            this.subtreeSize = 1 +
+                    (this.right == null ? 0 : this.right.subtreeSize) +
+                    (this.left == null ? 0 : this.left.subtreeSize);
 
             if (this.parent != null) {
                 this.parent.updateSubtreeSize();
