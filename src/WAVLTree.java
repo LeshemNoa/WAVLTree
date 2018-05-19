@@ -12,16 +12,7 @@ import java.util.*;
 public class WAVLTree implements Iterable {
     private WAVLNode root;
 
-    /*public WAVLTree(int key, String value) {
-        if ()
-        this.root = new WAVLNode(key, value);
-    }*/
-
     public WAVLTree() {
-    }
-
-    public WAVLTree(WAVLNode node) {
-        this.root = node;
     }
 
     /**
@@ -73,7 +64,9 @@ public class WAVLTree implements Iterable {
      * @return          node with key k, or null if k is not in the tree.
      */
     private WAVLNode findNode(int k, WAVLNode node) {
-      if (k == node.key)
+      if (node == null)
+          return null;
+      else if (k == node.key)
           return node;
       else if (k > node.key && node.right != null)
           return findNode(k, node.right);
@@ -219,6 +212,7 @@ public class WAVLTree implements Iterable {
                     return false;
             }
         }
+
         return true;
     }
 
@@ -229,6 +223,13 @@ public class WAVLTree implements Iterable {
      * as a result of an insertion, and corrects it by performing a series of rebalancing actions
      * up the path from the given node to the root of the tree.<br>
      *
+     * The function runs in O(h) = O(logn) time, as its runtime complexity is determined
+     * by the number of promotions (O(logn) promotions in the worst case), a the subtree size update
+     * process, which takes place as a result of the structural changes in the tree.
+     * The subtree size update traverses a path from the deepest leaf in the tree to the root
+     * in the worst case, hence it runs in O(logn) time.
+     *
+     * @param node      WAVL node object where there is a violation of the WAVL tree invariants
      * @return          number of promotions, rotations and double rotations performed
      *                  during the rebalancing process
      */
@@ -301,7 +302,11 @@ public class WAVLTree implements Iterable {
      * the invariants, as leaves are only allowed to be (1,1) vertices.
      * To solve this, z is demoted once again. All other nodes retain their ranks.<br>
      *
-     * This method runs in O(1) time as it only requires changing a fixed number of pointers.
+     * The function runs in O(h) = O(logn) time, as its runtime complexity is determined
+     * by the subtree size update process, which takes place as a result of the structural
+     * changes in the tree. The rotation process itself runs at O(1) time as it only involves
+     * a fixed number of pointers and fields. The subtree size update traverses a path from the
+     * deepest leaf in the tree to the root in the worst case, hence it runs in O(logn) time.
      *
      * @param z     the node at the root of the subtree rotated
      * @return      the number of rebalancing step made during this process -
@@ -357,7 +362,11 @@ public class WAVLTree implements Iterable {
      * the invariants, as leaves are only allowed to be (1,1) vertices.
      * To solve this, z is demoted once again. All other nodes retain their ranks.<br>
      *
-     * This method runs in O(1) time as it only requires changing a fixed number of pointers.
+     * The function runs in O(h) = O(logn) time, as its runtime complexity is determined
+     * by the subtree size update process, which takes place as a result of the structural
+     * changes in the tree. The rotation process itself runs at O(1) time as it only involves
+     * a fixed number of pointers and fields. The subtree size update traverses a path from the
+     * deepest leaf in the tree to the root in the worst case, hence it runs in O(logn) time.
      *
      * @param z     the node at the root of the subtree rotated
      * @return      the number of rebalancing step made during this process -
@@ -413,7 +422,12 @@ public class WAVLTree implements Iterable {
      *
      * During deletion, the rank of node b increases by 2, that of node z decreases by 2,
      * and that of x decreases by 1. All other nodes retains their ranks. <br>
-     * This method runs in O(1) time as it only requires changing a fixed number of pointers.
+     *
+     * The function runs in O(h) = O(logn) time, as its runtime complexity is determined
+     * by the subtree size update process, which takes place as a result of the structural
+     * changes in the tree. The rotation process itself runs at O(1) time as it only involves
+     * a fixed number of pointers and fields. The subtree size update traverses a path from the
+     * deepest leaf in the tree to the root in the worst case, hence it runs in O(logn) time.
      *
      * @param z     the node at the root of the subtree rotated
      * @return      the number of rebalancing step made during this process -
@@ -426,8 +440,8 @@ public class WAVLTree implements Iterable {
 
         WAVLNode x = z.left;
         WAVLNode b = x.right;
-        WAVLNode c = b.right;
-        WAVLNode d = b.left;
+        WAVLNode c = b.left;
+        WAVLNode d = b.right;
 
         z.replaceWith(b);
 
@@ -472,7 +486,11 @@ public class WAVLTree implements Iterable {
      * During deletion, the rank of node a increases by 2, that of node z decreases by 2,
      * and that of y decreases by 1. All other nodes retains their ranks. <br>
      *
-     * This method runs in O(1) time as it only requires changing a fixed number of pointers.
+     * The function runs in O(h) = O(logn) time, as its runtime complexity is determined
+     * by the subtree size update process, which takes place as a result of the structural
+     * changes in the tree. The rotation process itself runs at O(1) time as it only involves
+     * a fixed number of pointers and fields. The subtree size update traverses a path from the
+     * deepest leaf in the tree to the root in the worst case, hence it runs in O(logn) time.
      *
      * @param z     the node at the root of the subtree rotated
      * @return      the number of rebalancing step made during this process -
@@ -517,10 +535,8 @@ public class WAVLTree implements Iterable {
      *
      * This method runs in O(h) = O(logn) time in the worst case. The runtime complexity
      * will be determined by the time it takes to find the node to delete, the time
-     * complexity of the rebalancing process, and the time it takes to update the subtree
-     * sizes of the deleted node's ancestors. All of these processes will involve all nodes
-     * along the path from the deepest leaf in the tree to the root in the worst case so they
-     * run in O(h) = O(logn), hence the time complexity of insertion will be O(logn) as well.
+     * complexity of the rebalancing process. Both of these processes run in O(logn) time
+     * so the deletion process runs in O(logn) as well.
      *
      * @param k     key of node to be removed from the tree, if it exists in it
      * @return      the number of rebalancing operations performed during the rebalancing
@@ -535,6 +551,7 @@ public class WAVLTree implements Iterable {
 
        /* Step 2: Delete node */
        WAVLNode offender;
+       int numOfOperations = 0;
 
             /* Case a: Deleting a leaf */
        if (! node.isInnerNode()) { // leaf
@@ -542,50 +559,77 @@ public class WAVLTree implements Iterable {
        }
             /* Case b: Deleting a unary node with right child or a binary node */
        else if (node.right != null) {
+           /* - Key and value of deleted node are replaced by the successor's, retaining all other info */
            WAVLNode successor = nodeWithMinKey(node.right);
-           node.key = successor.key;
-           node.value = successor.value;
 
-           /* Can happen in case of deleting a unary node with right child who is a leaf,
-            or in case of deleting a binary node whose successor is a leaf */
-           if (! successor.isInnerNode())
+           /* - Can happen in case of deleting a unary node with right, child who is necessarily
+           a leaf, or in case of deleting a binary node whose successor is a leaf */
+           if (! successor.isInnerNode()) {
                offender = deleteLeaf(successor);
-
-           /* Can happen in case of deleting a binary node whose successor is unary node
-            with left child, who is a leaf */
-           else {
-               successor.key = successor.left.key;
-               successor.value = successor.left.value;
-               successor.rank--;
-               offender = deleteLeaf(successor.left);
+               node.key = successor.key;
+               node.value = successor.value;
            }
 
+           /* - Can happen in case of deleting a binary node whose successor is unary node
+            with right child, who is a leaf */
+           else {
+               node.key = successor.key;
+               node.value = successor.value;
+               successor.key = successor.right.key;
+               successor.value = successor.right.value;
+               offender = deleteLeaf(successor.right);
+           }
        }
-            /* Case c: Deleting a unary node with left child */
+            /* Case c: Deleting a unary node with left child, who is necessarily a leaf*/
        else {
-           node.key = node.left.key;
-           node.value = node.left.value;
-           node.rank--;
+           int newKey = node.left.key;
+           String newVal = node.left.value;
            offender = deleteLeaf(node.left);
+           node.key = newKey;
+           node.value = newVal;
        }
 
        /* Step 3: Rebalance */
-       int numOfOperations = deletionRebalance(offender);
-
-       /* Step 4: Update subtree sizes in all of the deleted node's ancestors */
-       WAVLNode curr = offender;
-       while (curr != null) {
-           curr.subtreeSize--;
-           curr = curr.parent;
-       }
+       numOfOperations += deletionRebalance(offender);
 
        return numOfOperations;
    }
 
+    /**
+     * Rebalances WAVL tree after insertion. <br>
+     *
+     * Receives a tree node where a violation of the WAVL tree invariants may have occurred
+     * as a result of a deletion, and corrects it by performing a series of rebalancing actions
+     * up the path from the given node to the root of the tree.<br>
+     *
+     * The function runs in O(h) = O(logn) time, as its runtime complexity is determined
+     * by the number of promotions (O(logn) promotions in the worst case), a the subtree size update
+     * process, which takes place as a result of the structural changes in the tree.
+     * The subtree size update traverses a path from the deepest leaf in the tree to the root
+     * in the worst case, hence it runs in O(logn) time.
+     *
+     * @param node      WAVL node object where there is a violation of the WAVL tree invariants
+     * @return          number of promotions, rotations and double rotations performed
+     *                  during the rebalancing process
+     */
    private int deletionRebalance(WAVLNode node) {
        int counter = 0;
        WAVLNode curr = node;
+
+       if (curr == null) { // Empty tree
+           return 0;
+       }
+
        int[] currVType = verticeType(node);
+
+       // Check if offender is a leaf with non zero rank
+       if (!curr.isInnerNode() && curr.rank != 0){
+           curr.rank = 0;
+           counter++;
+           curr = curr.parent;
+           if (curr != null)
+               currVType = verticeType(curr);
+       }
 
        while (curr != null && !isValidType(currVType)) {
            counter++;
@@ -597,7 +641,6 @@ public class WAVLTree implements Iterable {
                     currVType = verticeType(curr);
                continue;
            }
-
 
            if (currVType[0] == 3) { // Rolling up from the right
 
@@ -613,6 +656,7 @@ public class WAVLTree implements Iterable {
                }
                else if (childVType[1] == 1){ // child is (1,1) or (2,1)
                    counter += rotateLeft(curr, false);
+                   System.out.println("Rotating left, node=" + node.getKey());
                    return counter;
 
                }
@@ -620,6 +664,7 @@ public class WAVLTree implements Iterable {
                else {
                    assert (childVType[0] == 1 && childVType[1] == 2);
                    counter += doubleRotateLeft(curr, false);
+                   System.out.println("Double Rotating left, node=" + node.getKey());
                    return counter;
                }
 
@@ -638,12 +683,14 @@ public class WAVLTree implements Iterable {
 
                else if (childVType[0] == 1) { // child is (1,1) or (1,2)
                    counter += rotateRight(curr, false);
+                   System.out.println("Rotating right, node=" + node.getKey());
                    return counter;
                }
 
                else {
                    assert (childVType[0] == 2 && childVType[1] == 1);
                    counter += doubleRotateRight(curr, false);
+                   System.out.println("Double Rotating right, node=" + node.getKey());
                    return counter;
                }
            }
@@ -669,12 +716,14 @@ public class WAVLTree implements Iterable {
         WAVLNode parent = node.parent;
 
         if (parent != null) {
-            if (node.key > parent.key) { // remove right child
+            if (node.key >= parent.key) { // remove right child
                 parent.right = null;
             } else {
                 parent.left = null;
             }
             node.parent = null;
+        } else if (this.root == node) {
+            this.root = null;
         }
 
         return parent;
@@ -695,6 +744,9 @@ public class WAVLTree implements Iterable {
      * @return      the value associated with the minimal key in the tree
      */
    public String min() {
+       if (root == null) {
+           return null;
+       }
        return nodeWithMinKey(root).value;
    }
 
@@ -735,6 +787,9 @@ public class WAVLTree implements Iterable {
      * @return      the value associated with the maximal key in the tree
      */
    public String max() {
+       if (root == null) {
+           return null;
+       }
        return nodeWithMaxKey(root).value;
    }
 
@@ -782,7 +837,7 @@ public class WAVLTree implements Iterable {
         private WAVLNode curr;
 
         private WAVLIterator() {
-            this.curr = root;
+            this.curr = null;
         }
 
         /**
@@ -792,7 +847,10 @@ public class WAVLTree implements Iterable {
          */
         @Override
         public boolean hasNext() {
-            return (counter < root.subtreeSize);
+            if (root == null) {
+                return false;
+            }
+            return (counter < root.getSubtreeSize());
         }
 
         /**
@@ -809,24 +867,31 @@ public class WAVLTree implements Iterable {
         @Override
         public WAVLNode next() {
 
+            /* If this is the first next call, set curr to be the minimal node in the tree */
+            if (curr == null && counter == 0) {
+                curr = nodeWithMinKey(root);
+            }
+
+            else {
             /* Case 1: The current node's successor is in its subtree. In that case, it's
              * going to be at the node with the smallest key in curr's right subtree. */
 
-            if (curr.right != null) {
-                curr = nodeWithMinKey(curr.right);
-            }
+                if (curr.right != null) {
+                    curr = nodeWithMinKey(curr.right);
+                }
 
             /* Case 2: The current node's successor is not in its subtree. In that case,
             * it's going to be the lowest ancestor of curr, whose left child is also an
             * ancestor of curr. */
 
-            else {
-                WAVLNode parent = curr.parent;
-                while (parent != null && curr == parent.right) {
+                else {
+                    WAVLNode parent = curr.parent;
+                    while (parent != null && curr == parent.right) {
+                        curr = parent;
+                        parent = parent.parent;
+                    }
                     curr = parent;
-                    parent = parent.parent;
                 }
-                curr = parent;
             }
 
             counter++;
@@ -882,24 +947,24 @@ public class WAVLTree implements Iterable {
        return sortedVals.toArray(new String[sortedVals.size()]);
    }
 
-   /**
-    * public int size()
-    *
-    * Returns the number of nodes in the tree.
-    *
-    */
-
-   public int size() {
-           return root.subtreeSize;
-   }
-   
     /**
-    * public WAVLNode getRoot()
-    *
-    * Returns the root WAVL node, or null if the tree is empty
-    *
-    */
+     * Returns the current number of nodes in the tree.
+     *
+     * @return      the number of nodes in the tree
+     */
+   public int size() {
+       if (root == null) {
+           return 0;
+       }
 
+       return root.getSubtreeSize();
+   }
+
+    /**
+     * Returns the WAVL node which is currently set to be the root of the tree.
+     *
+     * @return      the node object at the root of the tree
+     */
    public WAVLNode getRoot()
    {
            return this.root;
@@ -908,7 +973,7 @@ public class WAVLTree implements Iterable {
 
     /**
      * Returns the info of the i'th greatest key in the tree, or null if i = 0 or if there
-     * are less than i keys in the tree <br>
+     * are less than i keys in the tree. <br>
      *
      * Uses the WAVLIterator and finds the required node by performing i calls to next. <br>
      *
@@ -922,7 +987,7 @@ public class WAVLTree implements Iterable {
      */
 
     public String select(int i) {
-        if (root == null || i > root.subtreeSize || i == 0)
+        if (root == null || i > root.getSubtreeSize() || i == 0)
             return null;
 
         WAVLNode curr = null;
@@ -930,12 +995,13 @@ public class WAVLTree implements Iterable {
         for (int j = 0; j < i; j++) {
             curr = iter.next();
         }
-
         return curr == null ? null : curr.value;
    }
 
     /**
-     *
+     * WAVL node object represents a vertice in the tree. Each key node object contains
+     * an integer key, which determines its place in the tree according to the BST
+     * property, and a string value.
      */
     public class WAVLNode {
 
@@ -947,13 +1013,13 @@ public class WAVLTree implements Iterable {
         private int subtreeSize;
         private int rank;
 
-            /**
-             * Constructor for the WAVLNode class. Creates new node item with provided key
-             * and value.<br>
-             *
-             * @param key       the node's key, which will determine its place in the tree
-             * @param value     the info that will be associated with the key
-             */
+        /**
+         * Constructor for the WAVLNode class. Creates new node item with provided key
+         * and value.<br>
+         *
+         * @param key       the node's key, which will determine its place in the tree
+         * @param value     the info that will be associated with the key
+         */
 
         private WAVLNode(int key, String value) {
             this.key = key;
@@ -964,14 +1030,24 @@ public class WAVLTree implements Iterable {
             this.subtreeSize = 0;
         }
 
-            /**
-             * Overloaded constructor for the WAVLNode class, with an additional parent node
-             * parameter.<br>
-             *
-             * @param key       the new node's key
-             * @param value     the new node's info
-             * @param parent    the new node's parent
-             */
+        /**
+         * Overloaded constructor for the WAVLNode class, with an additional parent node
+         * parameter.<br>
+         *
+         * Used in the insertion process, this constructor allows to place a new node
+         * as the child of an existing node, and update its ancestors subtree sizes after
+         * the insertion. <br>
+         *
+         * The function runs in O(h) = O(logn) time, as its runtime complexity is determined
+         * by the subtree size update process - the process itself runs at O(1)
+         * time as it only involves a fixed number of pointers. The subtree size update
+         * traverses a path from the deepest leaf in the tree to the root in the worst case,
+         * hence it runs in O(logn) time.
+         *
+         * @param key       the new node's key
+         * @param value     the new node's info
+         * @param parent    the new node's parent
+         */
         private WAVLNode(int key, String value, WAVLNode parent) {
             this(key, value);
             this.rank = 0;
@@ -980,77 +1056,108 @@ public class WAVLTree implements Iterable {
             else
                 parent.setLeftChild(this);
 
-            /* Update subtree sizes for all ancestors */
-            WAVLNode curr = parent.parent;
-            while (curr != null) {
-                curr.subtreeSize++;
-                curr = curr.parent;
-            }
+            parent.updateSubtreeSize();
 
         }
 
+        /**
+         * Retrieves the key of a specific node object. <br>
+         *
+         * @return      the integer key of a particular node objects
+         */
         public int getKey() {
             return key;
         }
 
+        /**
+         * Retrieves the value of a specific node object. <br>
+         *
+         * @return      the string value of a particular node objects
+         */
         public String getValue()
         {
-            return this.value;
+            return value;
         }
+
+        /**
+         * Retrieves the left child of a specific node object. <br>
+         *
+         * @return      the node object set as the left child of this node,
+         *              or null if node does not have a left child.
+         */
         public WAVLNode getLeft()
         {
             return left;
         }
+
+        /**
+         * Retrieves the right child of a specific node object. <br>
+         *
+         * @return      the node object set as the right child of this node,
+         *              or null if node does not have a right child.
+         */
         public WAVLNode getRight()
         {
             return right;
         }
 
-            /**
-             * Returns true if the node has any (non-null) children, and false if it's a leaf. <br>
-             *
-             * @return          true if node has any children, false otherwise
-             */
+        /**
+         * Returns true if the node has any (non-null) children, and false if it's a leaf. <br>
+         *
+         * @return          true if node has any children, false otherwise
+         */
         public boolean isInnerNode()
         {
             return (left != null || right != null);
         }
-            /**
-             * Returns the number of nodes whose this node is an ancestor of. <br>
-             *
-             * @return          total number of nodes in this node's left and right subtrees
-             */
+
+        /**
+         * Returns the number of nodes in the subtree of which this node is the root. <br>
+         *
+         * @return          the number of node in this nodes subtree: counting itself,
+         *                  and the number of nodes in its left and right subtrees.
+         */
         public int getSubtreeSize()
         {
             return subtreeSize + 1;
         }
 
-            /**
-             * Sets the right child of a node to be the node provided. <br>
-             *
-             * Updates the parent field for the child node as well, to maintain the doubly
-             * linked structure of the tree. In addition, updates the node's subtree size in
-             * case the new child comes with its own children, and in case the new right
-             * child is null. <br>
-             *
-             * @param rChild        node to be set as the right child, or null value
-             */
+        /**
+         * Sets the right child of a node to be the node provided, and updates subtree
+         * sizes affected by the change. <br>
+         *
+         * Updates the parent field for the child node as well, to maintain the doubly
+         * linked structure of the tree. <br>
+         *
+         * The function runs in O(h) = O(logn) time, as its runtime complexity is determined
+         * by the subtree size update process - the setting process itself runs at O(1)
+         * time as it only involves a fixed number of pointers. The subtree size update
+         * traverses a path from the deepest leaf in the tree to the root in the worst case,
+         * hence it runs in O(logn) time.
+         *
+         * @param rChild        node to be set as the right child, or null value
+         */
         private void setRightChild(WAVLNode rChild) {
             this.right = rChild;
             if (rChild != null) {
                 rChild.parent = this;
             }
 
-            this.updateSubTreeSize();
+            this.updateSubtreeSize();
         }
 
         /**
-         * Sets the left child of a node to be the node provided. <br>
+         * Sets the left child of a node to be the node provided, and updates subtree
+         * sizes affected by the change.<br>
          *
          * Updates the parent field for the child node as well, to maintain the doubly
-         * linked structure of the tree. In addition, updates the node's subtree size in
-         * case the new child comes with its own children, and in case the new left
-         * child is null. <br>
+         * linked structure of the tree. <br>
+         *
+         * The function runs in O(h) = O(logn) time, as its runtime complexity is determined
+         * by the subtree size update process - the setting process itself runs at O(1)
+         * time as it only involves a fixed number of pointers. The subtree size update
+         * traverses a path from the deepest leaf in the tree to the root in the worst case,
+         * hence it runs in O(logn) time.
          *
          * @param lChild        node to be set as the right child, or null value
          */
@@ -1061,34 +1168,45 @@ public class WAVLTree implements Iterable {
                 lChild.parent = this;
             }
 
-            this.updateSubTreeSize();
+            this.updateSubtreeSize();
         }
 
         /**
+         * Updates the subtree size field for the node based on the subtree sizes of its
+         * children. Afterwards it updates the subtree sizes for the node's ancestors
+         * recursively. <br>
          *
+         * The function runs in O(h) = O(logn) time, as it traverses a path from the deepest
+         * leaf in the tree to the root in the worst case.
          */
-        private void updateSubTreeSize() {
+        private void updateSubtreeSize() {
 
             this.subtreeSize =
                     (this.right == null ? 0 : this.right.subtreeSize + 1) +
                     (this.left == null ? 0 : this.left.subtreeSize + 1);
 
             if (this.parent != null) {
-                this.parent.updateSubTreeSize();
+                this.parent.updateSubtreeSize();
             }
         }
 
 
         /**
-         * Replaces a node with one of its descendants. <br>
+         * Replaces a node with one of its descendants, and updates the affected subtree tree sizes
+         * after the change. <br>
          *
-         * This methods takes care of the case where the node replaced is the root of the entire tree.
-         * It's called during rotations and during deletions. <br>
+         * This methods takes care of the case where the node replaced is the root of the entire tree.<br>
          *
          * If the node replaced is the root of the tree, the replacing node's parent field is
          * nullified, and it's placed as the root node of the WAVL tree object. Otherwise, it's
          * set to be the appropriate child of the parent of the replaced node, according to how its key
-         * relates to the parent's key.
+         * relates to the parent's key. <br>
+         *
+         * The function runs in O(h) = O(logn) time, as its runtime complexity is determined
+         * by the subtree size update process - the replacement process itself runs at O(1)
+         * time as it only involves a fixed number of pointers. The subtree size update
+         * traverses a path from the deepest leaf in the tree to the root in the worst case,
+         * hence it runs in O(logn) time.
          *
          * @param replacer       the node to take this the current node's place
          */
@@ -1104,7 +1222,7 @@ public class WAVLTree implements Iterable {
                 else
                     repParent.left = null;
 
-                repParent.updateSubTreeSize();
+                repParent.updateSubtreeSize();
             }
 
             /* Step 2: Set replacer as child of the replaced node, doubly linked */
@@ -1118,12 +1236,8 @@ public class WAVLTree implements Iterable {
             else {
                 replacer.parent = null;
                 root = replacer;
-                root.updateSubTreeSize();
+                root.updateSubtreeSize();
             }
-        }
-
-        public int getRank() {
-            return this.rank;
         }
     }
 }
