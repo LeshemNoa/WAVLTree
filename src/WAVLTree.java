@@ -4,17 +4,38 @@ import java.util.*;
  *
  * WAVLTree
  *
- * An implementation of a WAVL Tree.
- * (Haupler, Sen & Tarajan '15)
+ * An implementation of a WAVL Tree (Haupler, Sen and Tarajan '15).
+ * In this implementation, the tree structure is doubly linked, and it does not contain
+ * a representation of the "External leaf" object, whose rank is -1.
  *
  */
 
 public class WAVLTree implements Iterable {
     private WAVLNode root;
 
-    public WAVLTree() {
+    /**
+     * Returns the WAVL node which is currently set to be the root of the tree, or null
+     * if tree is empty.
+     *
+     * @return      the node object at the root of the tree or null if tree is empty
+     */
+    public WAVLNode getRoot()
+    {
+        return this.root;
     }
 
+    /**
+     * Returns the current number of nodes in the tree.
+     *
+     * @return      the number of nodes in the tree
+     */
+    public int size() {
+        if (root == null) {
+            return 0;
+        }
+
+        return root.getSubtreeSize();
+    }
     /**
      * Returns true if the tree does not have any nodes in it, false otherwise.<br>
      *
@@ -24,8 +45,8 @@ public class WAVLTree implements Iterable {
      *
      */
     public boolean empty() {
-      return (root == null);
-  }
+        return (root == null);
+    }
 
     /**
      * Searches the tree for key k and returns its value, or null if k isn't in
@@ -304,7 +325,7 @@ public class WAVLTree implements Iterable {
      *
      * The function runs in O(h) = O(logn) time, as its runtime complexity is determined
      * by the subtree size update process, which takes place as a result of the structural
-     * changes in the tree. The rotation process itself runs at O(1) time as it only involves
+     * changes in the tree. The rotation process itself runs in O(1) time as it only involves
      * a fixed number of pointers and fields. The subtree size update traverses a path from the
      * deepest leaf in the tree to the root in the worst case, hence it runs in O(logn) time.
      *
@@ -366,7 +387,7 @@ public class WAVLTree implements Iterable {
      *
      * The function runs in O(h) = O(logn) time, as its runtime complexity is determined
      * by the subtree size update process, which takes place as a result of the structural
-     * changes in the tree. The rotation process itself runs at O(1) time as it only involves
+     * changes in the tree. The rotation process itself runs in O(1) time as it only involves
      * a fixed number of pointers and fields. The subtree size update traverses a path from the
      * deepest leaf in the tree to the root in the worst case, hence it runs in O(logn) time.
      *
@@ -429,7 +450,7 @@ public class WAVLTree implements Iterable {
      *
      * The function runs in O(h) = O(logn) time, as its runtime complexity is determined
      * by the subtree size update process, which takes place as a result of the structural
-     * changes in the tree. The rotation process itself runs at O(1) time as it only involves
+     * changes in the tree. The rotation process itself runs in O(1) time as it only involves
      * a fixed number of pointers and fields. The subtree size update traverses a path from the
      * deepest leaf in the tree to the root in the worst case, hence it runs in O(logn) time.
      *
@@ -494,7 +515,7 @@ public class WAVLTree implements Iterable {
      *
      * The function runs in O(h) = O(logn) time, as its runtime complexity is determined
      * by the subtree size update process, which takes place as a result of the structural
-     * changes in the tree. The rotation process itself runs at O(1) time as it only involves
+     * changes in the tree. The rotation process itself runs in O(1) time as it only involves
      * a fixed number of pointers and fields. The subtree size update traverses a path from the
      * deepest leaf in the tree to the root in the worst case, hence it runs in O(logn) time.
      *
@@ -809,6 +830,10 @@ public class WAVLTree implements Iterable {
        return curr.value;
    }
 
+    /**
+     * Implementing the Iterable interface. Returns a new tree iterator.
+     * @return      a new WAVLIterator object
+     */
     @Override
     public Iterator iterator() {
         return new WAVLIterator();
@@ -818,9 +843,9 @@ public class WAVLTree implements Iterable {
      * The WAVL tree iterator is a finite iterator which will return, upon each call to next(),
      * the next node to appear in an in-order traversal of the tree.<br>
      *
-     * The iterator maintains two variables: a node curr, the node most recently returned by next(),
-     * and a counter, which counts the number of calls to next() and allows to determine whether
-     * the traversal is complete, and consequently if hasNext() is true or false.
+     * The iterator object maintains two fields: a node curr, the node most recently returned
+     * by next(), and a counter, which counts the number of calls to next() and allows to
+     * determine whether the traversal is complete, and consequently if hasNext() is true or false.
      *
      */
 
@@ -841,10 +866,7 @@ public class WAVLTree implements Iterable {
          */
         @Override
         public boolean hasNext() {
-            if (root == null) {
-                return false;
-            }
-            return (counter < root.getSubtreeSize());
+            return root != null && (counter < root.getSubtreeSize());
         }
 
         /**
@@ -860,13 +882,13 @@ public class WAVLTree implements Iterable {
 
         @Override
         public WAVLNode next() {
-
             /* If this is the first next call, set curr to be the minimal node in the tree */
             if (curr == null && counter == 0) {
                 curr = nodeWithMinKey(root);
             }
 
             else {
+                assert (curr != null);
             /* Case 1: The current node's successor is in its subtree. In that case, it's
              * going to be at the node with the smallest key in curr's right subtree. */
 
@@ -896,7 +918,7 @@ public class WAVLTree implements Iterable {
     /**
      * Returns a sorted array of the tree's keys, or an empty array if the tree is empty.<br>
      *
-     * The function runs in O(nlogn) in time as in the worst case, as it performs n cosecutive
+     * The function runs in O(nlogn) in time as in the worst case, as it performs n consecutive
      * Successor calls with worst case runtime complexity of O(logn). However, in HW2 we proved
      * that a tighter complexity bound would be O(n+h) = O(n+logn) = O(n).<br>
      *
@@ -923,7 +945,7 @@ public class WAVLTree implements Iterable {
      *
      * The i-th cell in the array will contain the value associated with the i-th key.<br>
      *
-     * The function runs in O(nlogn) in time as in the worst case, as it performs n cosecutive
+     * The function runs in O(nlogn) in time as in the worst case, as it performs n consecutive
      * Successor calls with worst case runtime complexity of O(logn). However, in HW2 we proved
      * that a tighter complexity bound would be O(n+h) = O(n+logn) = O(n).
      *
@@ -941,29 +963,6 @@ public class WAVLTree implements Iterable {
        return sortedVals.toArray(new String[sortedVals.size()]);
    }
 
-    /**
-     * Returns the current number of nodes in the tree.
-     *
-     * @return      the number of nodes in the tree
-     */
-   public int size() {
-       if (root == null) {
-           return 0;
-       }
-
-       return root.getSubtreeSize();
-   }
-
-    /**
-     * Returns the WAVL node which is currently set to be the root of the tree.
-     *
-     * @return      the node object at the root of the tree
-     */
-   public WAVLNode getRoot()
-   {
-           return this.root;
-   }
-
 
     /**
      * Returns the info of the i'th greatest key in the tree, or null if i = 0 or if there
@@ -971,7 +970,7 @@ public class WAVLTree implements Iterable {
      *
      * Uses the WAVLIterator and finds the required node by performing i calls to next. <br>
      *
-     * The function runs in O(nlogn) in time as in the worst case, as it performs n cosecutive
+     * The function runs in O(nlogn) in time as in the worst case, as it performs n consecutive
      * Successor calls with worst case runtime complexity of O(logn) each. However, in HW2 we proved
      * that a tighter complexity bound would be O(n+h) = O(n+logn) = O(n).<br>
      *
@@ -995,7 +994,10 @@ public class WAVLTree implements Iterable {
     /**
      * WAVL node object represents a vertice in the tree. Each key node object contains
      * an integer key, which determines its place in the tree according to the BST
-     * property, and a string value.
+     * property, and a string value.<br>
+     *
+     * The tree structure is doubly linked, hence each node knows its parent as well as
+     * its children.
      */
     public class WAVLNode {
 
@@ -1033,7 +1035,7 @@ public class WAVLTree implements Iterable {
          * the insertion. <br>
          *
          * The function runs in O(h) = O(logn) time, as its runtime complexity is determined
-         * by the subtree size update process - the process itself runs at O(1)
+         * by the subtree size update process - the process itself runs in O(1)
          * time as it only involves a fixed number of pointers. The subtree size update
          * traverses a path from the deepest leaf in the tree to the root in the worst case,
          * hence it runs in O(logn) time.
@@ -1096,7 +1098,7 @@ public class WAVLTree implements Iterable {
         }
 
         /**
-         * Returns true if this node object is not an external leaf object (which does
+         * Returns false if this node object is not an external leaf object (which does
          * not have a key and a value, and whose rank is -1).<br>
          *
          * In this implementation there is no actual representation for this object,
@@ -1113,7 +1115,7 @@ public class WAVLTree implements Iterable {
         /**
          * Returns false if the node has any (non-null) children, and true if it's a leaf. <br>
          *
-         * @return          true if node has any children, false otherwise
+         * @return          true if node does not have any children, false otherwise
          */
         private boolean isLeaf()
         {
@@ -1122,6 +1124,8 @@ public class WAVLTree implements Iterable {
 
         /**
          * Returns the number of nodes in the subtree of which this node is the root. <br>
+         *
+         * This function runs in O(1) time as it only involves accessing a field.
          *
          * @return          the number of node in this nodes subtree: counting itself,
          *                  and the number of nodes in its left and right subtrees.
@@ -1139,7 +1143,7 @@ public class WAVLTree implements Iterable {
          * linked structure of the tree. <br>
          *
          * The function runs in O(h) = O(logn) time, as its runtime complexity is determined
-         * by the subtree size update process - the setting process itself runs at O(1)
+         * by the subtree size update process - the setting process itself runs in O(1)
          * time as it only involves a fixed number of pointers. The subtree size update
          * traverses a path from the deepest leaf in the tree to the root in the worst case,
          * hence it runs in O(logn) time.
@@ -1163,7 +1167,7 @@ public class WAVLTree implements Iterable {
          * linked structure of the tree. <br>
          *
          * The function runs in O(h) = O(logn) time, as its runtime complexity is determined
-         * by the subtree size update process - the setting process itself runs at O(1)
+         * by the subtree size update process - the setting process itself runs in O(1)
          * time as it only involves a fixed number of pointers. The subtree size update
          * traverses a path from the deepest leaf in the tree to the root in the worst case,
          * hence it runs in O(logn) time.
@@ -1212,7 +1216,7 @@ public class WAVLTree implements Iterable {
          * relates to the parent's key. <br>
          *
          * The function runs in O(h) = O(logn) time, as its runtime complexity is determined
-         * by the subtree size update process - the replacement process itself runs at O(1)
+         * by the subtree size update process - the replacement process itself runs in O(1)
          * time as it only involves a fixed number of pointers. The subtree size update
          * traverses a path from the deepest leaf in the tree to the root in the worst case,
          * hence it runs in O(logn) time.

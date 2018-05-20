@@ -2,7 +2,7 @@ import java.util.*;
 
 public class NoaTest {
     public static void main(String[] args) {
-        testWAVL();
+        experiment();
     }
 
     public static void testWAVL() {
@@ -72,14 +72,26 @@ public class NoaTest {
         fuzz(10000, false, false);
     }
 
+    private static void experiment() {
+        for (int i = 1; i < 11; i++) {
+            fuzz(i * 10000, false, false);
+        }
+    }
+
     private static void fuzz(int count, boolean print, boolean validateStructure) {
         WAVLTree t = new WAVLTree();
         Random r = new Random();
-        Set<Integer> inserted = new HashSet<>();
+        //Set<Integer> inserted = new HashSet<>();
 
+        int maxOpsForInsert = 0;
+        int totalOpsForInsert = 0;
         for (int i=0; i < count; i++) {
             int randomKey = r.nextInt();
-            t.insert(randomKey, String.valueOf(randomKey));
+            int curr = t.insert(randomKey, String.valueOf(randomKey));
+
+            if (curr > maxOpsForInsert)
+                maxOpsForInsert = curr;
+            totalOpsForInsert += curr;
 
             if (validateStructure && !validateBinaryStructure(t.getRoot())) {
                 System.out.println("Tree failed validation during insert");
@@ -87,74 +99,93 @@ public class NoaTest {
                 return;
             }
 
-            inserted.add(randomKey);
+            //inserted.add(randomKey);
         }
 
-        System.out.println("Tree built: " + t.getRoot().getSubtreeSize());
+        int[] keys = t.keysToArray();
+        int maxOpsForDelete = 0;
+        int totalOpsForDelete = 0;
 
-        if (t.keysToArray().length != inserted.size()) {
-            System.out.println("keysToArray.length != inserted.size(), " + t.keysToArray().length + "!=" + inserted.size());
-            return;
+        for (int k : keys) {
+            int curr = t.delete(k);
+            if (curr > maxOpsForDelete)
+                maxOpsForDelete = curr;
+            totalOpsForDelete += curr;
         }
 
-        ArrayList<Integer> keys = new ArrayList<>();
-        for (int k : t.keysToArray()) {
-            keys.add(k);
-        }
+        float averageInsert = totalOpsForInsert / count;
+        float averageDelete = totalOpsForDelete / count;
 
-        if (!inserted.containsAll(keys)) {
-            System.out.println("keysToArray != inserted");
-            return;
-        }
+        System.out.println(""+ count + ", " + maxOpsForInsert + ", " + averageInsert
+                            + ", " + maxOpsForDelete + ", " + averageDelete);
 
-        for (Integer k : keys) {
-            if (t.search(k) == null) {
-                System.out.println("Couldn't search for: " + k);
-                return;
-            }
-        }
 
-        if (t.size() != keys.size()) {
-            System.out.println("wrong tree size");
-            return;
-        }
 
-        Collections.shuffle(keys, r);
-
-        System.out.println("Keys shuffles: " + keys.size());
-
-        for (Integer k : keys) {
-            if (print) {
-                System.out.println("Deleting key: " + k);
-            }
-
-            t.delete(k);
-
-            if (print) {
-                System.out.println(WAVLTreePrinter.toString(t));
-            }
-
-            if (validateStructure && !validateBinaryStructure(t.getRoot())) {
-                System.out.println("Tree failed validation during delete");
-                System.out.println(WAVLTreePrinter.toString(t));
-                return;
-            }
-
-            if (t.search(k) != null) {
-                System.out.println("Didn't expect to find key after deletion: " + k);
-                break;
-            }
-        }
-
-        if (!t.empty()) {
-            System.out.println("Tree isn't empty:");
-            System.out.println(WAVLTreePrinter.toString(t));
-        }
-
-        if (t.size() != 0) {
-            System.out.println("wrong tree size");
-            return;
-        }
+//        System.out.println("Tree built: " + t.getRoot().getSubtreeSize());
+//
+//        if (t.keysToArray().length != inserted.size()) {
+//            System.out.println("keysToArray.length != inserted.size(), " + t.keysToArray().length + "!=" + inserted.size());
+//            return;
+//        }
+//
+//        ArrayList<Integer> keys = new ArrayList<>();
+//        for (int k : t.keysToArray()) {
+//            keys.add(k);
+//        }
+//
+//        if (!inserted.containsAll(keys)) {
+//            System.out.println("keysToArray != inserted");
+//            return;
+//        }
+//
+//        for (Integer k : keys) {
+//            if (t.search(k) == null) {
+//                System.out.println("Couldn't search for: " + k);
+//                return;
+//            }
+//        }
+//
+//        if (t.size() != keys.size()) {
+//            System.out.println("wrong tree size");
+//            return;
+//        }
+//
+//        Collections.shuffle(keys, r);
+//
+//        System.out.println("Keys shuffles: " + keys.size());
+//
+//        for (Integer k : keys) {
+//            if (print) {
+//                System.out.println("Deleting key: " + k);
+//            }
+//
+//            t.delete(k);
+//
+//            if (print) {
+//                System.out.println(WAVLTreePrinter.toString(t));
+//            }
+//
+//            if (validateStructure && !validateBinaryStructure(t.getRoot())) {
+//                System.out.println("Tree failed validation during delete");
+//                System.out.println(WAVLTreePrinter.toString(t));
+//                return;
+//            }
+//
+//            if (t.search(k) != null) {
+//                System.out.println("Didn't expect to find key after deletion: " + k);
+//                break;
+//            }
+//        }
+//
+//        if (!t.empty()) {
+//            System.out.println("Tree isn't empty:");
+//            System.out.println(WAVLTreePrinter.toString(t));
+//        }
+//
+//        if (t.size() != 0) {
+//            System.out.println("wrong tree size");
+//            return;
+//        }
     }
 
     static boolean validateBinaryStructure(WAVLTree.WAVLNode n) {
