@@ -196,7 +196,7 @@ public class WAVLTree implements Iterable {
      *                  and its left child; array[1] - rank difference between the node
      *                  and its right child
      */
-    private int[] verticeType(WAVLNode node) {
+    private int[] vertexType(WAVLNode node) {
        int[] rankDiffs = new int[2];
 
        if (node.left != null)
@@ -213,17 +213,17 @@ public class WAVLTree implements Iterable {
     }
 
     /**
-     * Receives a size 2 array of rank differences produced by the verticeType function,
-     * and checks if the vertice type is valid according to the WAVL rules. <br>
+     * Receives a size 2 array of rank differences produced by the vertexType function,
+     * and checks if the vertex type is valid according to the WAVL rules. <br>
      *
-     * Returns a boolean value - true if the vertice type is one of the following: {(1,1),
+     * Returns a boolean value - true if the vertex type is one of the following: {(1,1),
      * (1,2), (2,1), (2,2)}, and false otherwise, implying rebalancing is required. <br>
      *
      * This function runs in O(1) time as it iterates on a fixed sized array.
      *
      * @param vType     a size 2 array of rank differences between a certain node in the tree
      *                  and its two children
-     * @return          true if vertice type is in accordance with the WAVL invariants, false
+     * @return          true if vertex type is in accordance with the WAVL invariants, false
      *                  otherwise
      */
     private boolean isValidType(int[] vType) {
@@ -257,7 +257,7 @@ public class WAVLTree implements Iterable {
     private int insertionRebalance(WAVLNode node) {
         int counter = 0;
         WAVLNode curr = node;
-        int[] currVType = verticeType(node);
+        int[] currVType = vertexType(node);
 
         while (curr != null && !isValidType(currVType)) { // curr != null: Haven't reached the root yet
 
@@ -266,7 +266,7 @@ public class WAVLTree implements Iterable {
                 curr.rank++;
                 curr = curr.parent;
                 if (curr != null)
-                    currVType = verticeType(curr);
+                    currVType = vertexType(curr);
                 continue;
             }
             // Rotation cases
@@ -274,7 +274,7 @@ public class WAVLTree implements Iterable {
             if (currVType[0] == 0) { // Rolling up from the left
                 assert (currVType[1] == 2); // (0,2)
 
-                int[] childVType = verticeType(curr.left);
+                int[] childVType = vertexType(curr.left);
 
                 if (childVType[0] == 1 && childVType[1] == 2) { // child is (1,2)
                     counter += rotateRight(curr, true);
@@ -286,7 +286,7 @@ public class WAVLTree implements Iterable {
             } else if (currVType[1] == 0) { // Rolling up from the right
                 assert (currVType[0] == 2); // (2,0)
 
-                int[] childVType = verticeType(curr.right);
+                int[] childVType = vertexType(curr.right);
 
                 if (childVType[0] == 2 && childVType[1] == 1) { //child is (2,1)
                     counter += rotateLeft(curr, true);
@@ -654,7 +654,7 @@ public class WAVLTree implements Iterable {
            return 0;
        }
 
-       int[] currVType = verticeType(node);
+       int[] currVType = vertexType(node);
 
        // Check if offender is a leaf with non zero rank
        if (curr.isLeaf() && curr.rank != 0){
@@ -662,7 +662,7 @@ public class WAVLTree implements Iterable {
            counter++;
            curr = curr.parent;
            if (curr != null)
-               currVType = verticeType(curr);
+               currVType = vertexType(curr);
        }
 
        while (curr != null && !isValidType(currVType)) {
@@ -672,13 +672,13 @@ public class WAVLTree implements Iterable {
                curr.rank--;
                curr = curr.parent;
                if (curr != null)
-                    currVType = verticeType(curr);
+                    currVType = vertexType(curr);
                continue;
            }
 
            if (currVType[0] == 3) { // Rolling up from the right
 
-               int[] childVType = verticeType(curr.right);
+               int[] childVType = vertexType(curr.right);
 
                if (currVType[1] == 1 && childVType[0] + childVType[1] == 4) { // child is (2,2) - Double demote
                    curr.rank--;
@@ -686,7 +686,7 @@ public class WAVLTree implements Iterable {
                    counter += 2; // Two demotions
                    curr = curr.parent;
                    if (curr != null)
-                        currVType = verticeType(curr);
+                        currVType = vertexType(curr);
                }
                else if (childVType[1] == 1){ // child is (1,1) or (2,1)
                    counter += rotateLeft(curr, false);
@@ -702,7 +702,7 @@ public class WAVLTree implements Iterable {
 
            } else if (currVType[1] == 3) { // Rolling up from the left
 
-               int[] childVType = verticeType(curr.left);
+               int[] childVType = vertexType(curr.left);
 
                if (currVType[0] == 1 && childVType[0] + childVType[1] == 4) { // child is (2,2) - Double demote
                    curr.rank--;
@@ -710,7 +710,7 @@ public class WAVLTree implements Iterable {
                    counter += 2;
                    curr = curr.parent;
                    if (curr != null)
-                        currVType = verticeType(curr);
+                        currVType = vertexType(curr);
                }
 
                else if (childVType[0] == 1) { // child is (1,1) or (1,2)
@@ -992,7 +992,7 @@ public class WAVLTree implements Iterable {
    }
 
     /**
-     * WAVL node object represents a vertice in the tree. Each key node object contains
+     * WAVL node object represents a vertex in the tree. Each key node object contains
      * an integer key, which determines its place in the tree according to the BST
      * property, and a string value.<br>
      *
